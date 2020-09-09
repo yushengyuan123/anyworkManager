@@ -1,0 +1,26 @@
+@import "../../../share/cssMixin/cssMixin";
+
+.my-organization {
+  $heightContainer: 18rem;
+  height: 18rem;
+  background-color: white;
+  border-radius: 5px;
+
+  $height: 2.5rem;
+  .my-organization-title {
+    height: $height;
+    line-height: $height;
+    padding-left: 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font: {
+      size: 1.2rem;
+      weight: bold;
+    }
+  }
+
+  .details-container {
+    @include flex-layout;
+    height: $heightContainer - $height;
+  }
+}
