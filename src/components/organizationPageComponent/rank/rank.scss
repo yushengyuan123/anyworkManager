@@ -1,0 +1,69 @@
+@import "../../../share/cssMixin/cssMixin";
+
+.rank-container {
+  background-color: white;
+  border-radius: 5px;
+
+  $height: 2.5rem;
+  .my-organization-title {
+    height: $height;
+    line-height: $height;
+    padding-left: 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font: {
+      size: 1.1rem;
+      weight: bold;
+    }
+  }
+}
+
+.row-container {
+  @include flex-layout;
+  height: 65px;
+  margin-top: 30px;
+
+  div {
+    @include flex-layout;
+    height: 100%;
+    text-align: center;
+
+    span {
+      height: 65px;
+      line-height: 65px;
+      font: {
+        size: 1.5rem;
+        weight: bold;
+      };
+    }
+
+    img {
+      $size: 65px;
+      height: $size;
+      width: $size;
+    }
+  }
+
+  .rank-number {
+    width: 10%;
+
+  }
+
+  .icon {
+    width: 20%;
+  }
+
+  .name {
+    width: 20%;
+  }
+
+  .studentId {
+    width: 30%;
+  }
+
+  .score {
+    width: 20%;
+    font-size: 25px;
+    color: #2d8cf0;
+  }
+}

@@ -22,8 +22,10 @@
 
 <style scoped lang="scss">
     .right-container {
-        height: 100vh;
+        min-height: 100vh;
         width: 100%;
         background-color: #f5f7f9;
+        overflow: auto;
+        padding-bottom: 7rem;
     }
 </style>

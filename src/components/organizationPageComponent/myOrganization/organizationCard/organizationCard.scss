@@ -1,5 +1,96 @@
+@import "../../../../share/cssMixin/cssMixin";
+
 .organization-card-container {
-  height: 220px;
-  width: 200px;
+  height: 200px;
+  width: 220px;
   border: 1px solid #a09e9e;
+  margin: 0 1rem 0 1rem;
+}
+
+$titleHeight: 60px;
+.header-title-container {
+  @include flex-layout;
+  height: $titleHeight;
+
+
+  $width: 35%;
+  .image-container {
+    @include flex-layout;
+    height: 100%;
+    width: $width;
+
+    img {
+      $imgSize: 50px;
+      height: $imgSize;
+      width: $imgSize;
+    }
+  }
+
+  .text-container {
+    @include flex-layout;
+    height: 100%;
+    width: calc(100% - #{$width});
+    text-align: center;
+    font: {
+      size: 1rem;
+      weight: bold;
+    };
+  }
+}
+
+$tagHeight: 2rem;
+.organization-tag {
+  @include flex-layout;
+  height: $tagHeight;
+  background-color: #42b983;
+  color: white;
+}
+
+$infoHeight: 5rem;
+.organization-info-container {
+  height: $infoHeight;
+
+  .des-outer {
+    @include flex-layout;
+
+    $desWidth: 25%;
+    .des-container {
+      @include flex-layout;
+      height: $infoHeight / 3;
+      width:  $desWidth;
+      font: {
+        weight: bold;
+      };
+    }
+
+    .des-value {
+      text-align: left;
+      height: $infoHeight / 3;
+      line-height: $infoHeight / 3;
+      width: calc(100% - #{$desWidth});
+    }
+  }
+}
+
+$controlHeight: calc(100% - #{$titleHeight} - #{$tagHeight} - #{$infoHeight});
+.control-container {
+  height: $controlHeight;
+  text-align: left;
+
+  span {
+    img {
+      cursor: pointer;
+      $size: 15px;
+      height: $size;
+      width: $size;
+      margin-left: 10px;
+      margin-top: 4px;
+    }
+  }
+
+  .people-num {
+    height: $controlHeight;
+    float: right;
+    margin-right: 10px;
+  }
 }

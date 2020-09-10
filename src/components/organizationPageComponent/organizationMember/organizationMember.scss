@@ -1,0 +1,52 @@
+.member-container {
+  height: 70%;
+  width: 60%;
+  background-color: white;
+  border-radius: 6px;
+
+  $height: 2.5rem;
+
+  .my-organization-title {
+    height: $height;
+    line-height: $height;
+    padding-left: 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font: {
+      size: 1.1rem;
+      weight: bold;
+    }
+  }
+
+  .member-details-container {
+    width: 95%;
+    margin: 0 auto;
+    text-align: left;
+
+    .member-details-con {
+      display: inline-block;
+      width: 11%;
+      min-width: 120px;
+      border-radius: 4px;
+      padding: 30px 10px;
+      margin: 20px 1.5%;
+      background-color: #393c42;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+
+      img {
+        display: inline-block;
+        margin: 10px auto;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+
+      p {
+        margin-top: 10px;
+      }
+    }
+
+  }
+}
