@@ -3,6 +3,7 @@
   width: 60%;
   background-color: white;
   border-radius: 6px;
+  overflow: auto;
 
   $height: 2.5rem;
 
@@ -49,4 +50,18 @@
     }
 
   }
+}
+
+.member-container::-webkit-scrollbar {
+  width: 7px;
+}
+.member-container::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: rgb(184,184,184);
+}
+.member-container::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  border-bottom-right-radius: 8px;
+  background: rgb(235,235,235);
 }

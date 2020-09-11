@@ -17,6 +17,18 @@ const routes = [
                 path: 'organization',
                 name: 'organization',
                 component: () => import('../views/Index/organization/organization')
+            },
+            {
+                path: 'exercisePaper',
+                name: 'ExercisePaper',
+                component: () => import('../views/Index/ExercisePaper/ExercisePaper'),
+                children: [
+                    {
+                        path: 'remarkPaper',
+                        name: 'remarkPaper',
+                        component: () => import('../views/Index/ExercisePaper/remarkPaper/remarkPaper'),
+                    }
+                ]
             }
         ]
     },

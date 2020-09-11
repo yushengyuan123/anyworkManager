@@ -19,55 +19,38 @@
 </template>
 
 <script>
+    import organizationApi from "../../../share/api/organizationApi";
+
     export default {
         name: "rank",
 
         data() {
             return {
-                studentList: [
-                    {
-                        rank: 1,
-                        imgUrl: '',
-                        name: '余圣源',
-                        id: '3118004982',
-                        score: '12.4'
-                    },
-                    {
-                        rank: 2,
-                        imgUrl: '',
-                        name: '余圣源',
-                        id: '3118004983',
-                        score: '12.4'
-                    },
-                    {
-                        rank: 3,
-                        imgUrl: '',
-                        name: '余圣源',
-                        id: '3118004984',
-                        score: '12.4'
-                    },
-                    {
-                        rank: 4,
-                        imgUrl: '',
-                        name: '余圣源',
-                        id: '3118004985',
-                        score: '12.4'
-                    },
-                    {
-                        rank: 5,
-                        imgUrl: '',
-                        name: '余圣源',
-                        id: '3118004986',
-                        score: '12.4'
-                    },
-                    {
-                        rank: 6,
-                        imgUrl: '',
-                        name: '余圣源',
-                        id: '3118004987',
-                        score: '12.4'
-                    },
-                ]
+                studentList: []
+            }
+        },
+
+        mounted() {
+            this.getClassRank()
+        },
+
+        methods: {
+            getClassRank() {
+                organizationApi.getMemberList({testpaperId: 0}).then(res => {
+                    this.dataControl(res.data.leaderboards)
+                })
+            },
+
+            dataControl(arr) {
+               arr.forEach((item, index) => {
+                   this.studentList.push({
+                       rank: index + 1,
+                       imgUrl: item.imagePath,
+                       name: item.username,
+                       id: item.studentId,
+                       score: item.score
+                   })
+               })
             }
         }
     }

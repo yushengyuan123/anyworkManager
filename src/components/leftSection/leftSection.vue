@@ -14,7 +14,7 @@
             </template>
             <MenuItem name="2-1">章节</MenuItem>
             <MenuItem name="2-2">试卷</MenuItem>
-            <MenuItem name="2-2">评卷</MenuItem>
+            <MenuItem name="2-2"  to="/index/exercisePaper/remarkPaper">评卷</MenuItem>
         </Submenu>
         <MenuItem name="3">
             <Icon type="ios-filing"/>

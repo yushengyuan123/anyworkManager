@@ -19,7 +19,7 @@
 }
 
 .row-container {
-  @include flex-layout;
+  @include flex-left-layout;
   height: 65px;
   margin-top: 30px;
 
@@ -50,15 +50,15 @@
   }
 
   .icon {
-    width: 20%;
+    width: 15%;
   }
 
   .name {
-    width: 20%;
+    width: 15%;
   }
 
   .studentId {
-    width: 30%;
+    width: 15%;
   }
 
   .score {
