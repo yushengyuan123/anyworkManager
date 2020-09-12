@@ -1,10 +1,18 @@
 <template>
-    <div>Let"s start your Vue journey, good lucky!</div>
+    <div>
+        <studentList></studentList>
+    </div>
+
 </template>
 
 <script>
+    import studentList from '../../../../components/studentList/studentList'
+
     export default {
-        name: "remarkPaper"
+        name: "remarkPaper",
+        components: {
+            studentList:studentList
+        }
     }
 </script>
 
