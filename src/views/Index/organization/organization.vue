@@ -1,20 +1,18 @@
 <template>
     <div class="organization-container">
-        <!-- 组织成员显示弹窗-->
-        <organizationMember
-                v-if="memberShow.show"
-                :isShow="memberShow"
-                :studentList="studentList"
-        ></organizationMember>
-
         <buttonArea></buttonArea>
 
         <myOrganization
             :isShow="memberShow"
             :studentList="studentList"
+            @updateRankList="getRankList"
         ></myOrganization>
 
-        <rank></rank>
+        <rank
+                :rank="rankList"
+        >
+
+        </rank>
     </div>
 </template>
 
@@ -36,8 +34,23 @@
         data() {
             return {
                 memberShow: {show: false},
+
                 //组织学生名单列表
-                studentList: []
+                studentList: [],
+
+                //学生排名数组
+                rankList: []
+            }
+        },
+
+        methods: {
+            //这里是组件MyOrganization 通过emit触发的方法 从这里获取到rank 传入组件rank中
+            getRankList({testPaperId, organizationId}) {
+                organizationId = organizationId || ''
+
+                organizationApi.getMemberList({testpaperId: testPaperId}, organizationId).then(res => {
+                    this.rankList = res.data.leaderboards
+                })
             }
         }
 

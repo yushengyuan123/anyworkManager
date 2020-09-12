@@ -22,3 +22,17 @@ export function verifyDateFormat(value) {
 export function getCurrentDate() {
     return formatDate(new Date())
 }
+
+// 获取上传图片的blob地址
+export function getImageSrc(file) {
+    let reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    return new Promise((resolve, reject) => {
+        reader.onload = (event) => {
+            let blob = new Blob([event.target.result]);
+            window.URL = window.URL || window.webkitURL;
+            let blobURL = window.URL.createObjectURL(blob);
+            resolve(blobURL);
+        }
+    })
+}

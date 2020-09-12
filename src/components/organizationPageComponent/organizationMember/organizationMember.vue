@@ -1,7 +1,5 @@
 <template>
-    <GlobalLayer @click.native="cancelLayer">
         <div class="member-container" @click.stop="doNothing">
-            <div class="my-organization-title">组织成员</div>
             <div class="member-details-container">
                 <div class="member-details-con" v-for="item in memberList" :key="item.key">
                     <img src="../../../assets/images/noimage.png" alt="">
@@ -10,7 +8,6 @@
                 </div>
             </div>
         </div>
-    </GlobalLayer>
 </template>
 
 <script>
@@ -25,6 +22,7 @@
 
         props: {
             isShow: {type: Object},
+
             studentList: {type: Array}
         },
 

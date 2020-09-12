@@ -3,6 +3,11 @@
         <drawer
                 :show="showEdit"
                 :imageUrl="imageUrl"
+                :token="description[1].value"
+                :desc="description[2].value"
+                :organizationName="organizationName"
+                :organizationId="organizationId"
+                :title="1"
         ></drawer>
 
         <div class="header-title-container">
@@ -45,7 +50,7 @@
 <script>
     import drawer from "./drawer/drawer";
     import OrganizationApi from "../../../../share/api/organizationApi";
-    import {interceptorsRes} from "../../../../share/net/response";
+    import {interceptors, interceptorsRes} from "../../../../share/net/response";
 
     export default {
         name: "organizationCard",
@@ -56,18 +61,26 @@
 
         props: {
             organizationId: {type: Number},
+
             organizationName: {type: String},
+
             teacher: {type: String},
+
             passKey: {type: String},
+
             des: {type: String},
+
             studentNumber: {type: Number},
+
             imagePath: {type: String}
         },
 
         data() {
             return {
                 showEdit: {showDrawer: false},
+
                 imageUrl: process.env.VUE_APP_URL + this.imagePath.replace('/anywork', ''),
+
                 description: [
                     {
                         key: 0,
@@ -108,7 +121,7 @@
             //调用接口删除组织
             deleteOrganization() {
                 OrganizationApi.deleteOrganization({organizationId: this.organizationId}).then(res => {
-                    interceptorsRes(() => {
+                    interceptors(() => {
                         this.$emit('updateOrganization')
                     }, {
                         message: res.stateInfo,

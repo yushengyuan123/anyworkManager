@@ -24,33 +24,42 @@
     export default {
         name: "rank",
 
+        props: {
+            rank: {
+                type: Array,
+                default: () => {
+                    return []
+                }
+            }
+        },
+
+        watch: {
+            ///观测外部rank的变化，如果变化马上进行视图更新，如果不主动触发，视图是不会更新
+            'rank': function () {
+                this.renderData(this.rank)
+            }
+        },
+
         data() {
             return {
                 studentList: []
             }
         },
 
-        mounted() {
-            this.getClassRank()
-        },
-
         methods: {
-            getClassRank() {
-                organizationApi.getMemberList({testpaperId: 0}).then(res => {
-                    this.dataControl(res.data.leaderboards)
-                })
-            },
+            renderData(arr) {
+                //渲染前先清空studentList
+                this.studentList.length = 0
 
-            dataControl(arr) {
-               arr.forEach((item, index) => {
-                   this.studentList.push({
-                       rank: index + 1,
-                       imgUrl: item.imagePath,
-                       name: item.username,
-                       id: item.studentId,
-                       score: item.score
-                   })
-               })
+                arr.forEach((item, index) => {
+                    this.studentList.push({
+                        rank: index + 1,
+                        imgUrl: item.imagePath,
+                        name: item.username,
+                        id: item.studentId,
+                        score: item.score
+                    })
+                })
             }
         }
     }

@@ -1,7 +1,7 @@
 <!— 这个是点击组件那个card 组件的编辑按钮 然后在屏幕左侧弹出的一个编辑框组件 直接调用iview库-->
 <template>
     <Drawer
-            title="修改组织"
+            :title="componentTitle"
             v-model="isShow.showDrawer"
             width="720"
             :mask-closable="false"
@@ -22,7 +22,11 @@
             <Row :gutter="32">
                 <Col span="12">
                     <FormItem label="组织名称" label-position="top">
-                        <Input v-model="formData.organizationName" placeholder="请输入组织名称"/>
+                        <Input
+                                v-model="formData.organizationName"
+                                placeholder="请输入组织名称"
+                                :disabled="!!drawTitle"
+                        />
                     </FormItem>
                 </Col>
                 <Col span="12">
@@ -37,7 +41,7 @@
         </Form>
 
         <div class="demo-drawer-footer">
-            <Button style="margin-right: 8px" @click="isShow.showDrawer = false">取消</Button>
+            <Button style="margin-right: 8px" @click="deStoryComponent">取消</Button>
             <Button type="primary" @click="submitConfirm">确定</Button>
         </div>
     </Drawer>
@@ -46,7 +50,8 @@
 <script>
     import {formatDate} from "../../../../../share/utils/globalUtils";
     import organizationApi from "../../../../../share/api/organizationApi";
-    import {interceptors, interceptorsRes} from "../../../../../share/net/response";
+    import {interceptors} from "../../../../../share/net/response";
+    import * as globalUtils from '../../../../../share/utils/globalUtils'
 
     export default {
         props: {
@@ -54,27 +59,57 @@
             //组件复用传值，如果这个值为true，
             isCreate: {type: Object},
             //头像url
-            imageUrl: {type: String, default: ''},
+            imageUrl: {type: String, default: require('../../../../../assets/images/noimage.png')},
             //标题，为什么会有这个字段原因在于，这个组件是被复用的，创建和编辑都是用这个组件
-            title: {type: String}
+            //0是创建 1是修改
+            title: {type: Number | String},
+
+            token: {type: String, default: ''},
+
+            desc: {type: String, default: ''},
+
+            organizationName: {type: String, default: ''},
+
+            organizationId: {type: String | Number, default: ''}
         },
+
         data() {
             return {
                 isShow: this.show,
+
+                drawTitle: this.title,
+
                 styles: {
                     height: 'calc(100% - 55px)',
                     overflow: 'auto',
                     paddingBottom: '53px',
                     position: 'static'
                 },
+
                 formData: {
-                    organizationName: '',
-                    token: '',
-                    description: ''
+                    organizationName: this.organizationName,
+                    token: this.token,
+                    description: this.desc
                 },
+
                 filesData: null,
-                imagePath: this.imageUrl || ''
+
+                imagePath: this.imageUrl,
             }
+        },
+
+        computed: {
+            componentTitle() {
+                return this.title ? '修改组织' : '创建组织'
+            }
+        },
+
+
+        mounted() {
+        },
+
+        updated() {
+            this.clearData()
         },
 
         methods: {
@@ -89,6 +124,7 @@
                 })
             },
 
+            //发送数据到后台
             submitData() {
                 const requestKey = this.formData
 
@@ -113,10 +149,38 @@
 
                 if (!!file) {
                     this.filesData = new window.FormData()
+
                     this.filesData.append("file", file, file.name)
+
+                    globalUtils.getImageSrc(file).then((blobUrl) => {
+                        this.imagePath = blobUrl;
+                    });
                 } else {
                     console.log('未选择文件')
                 }
+            },
+
+            //当创建的时候需要清除一次数据，否则上次创建的数据就会保留
+            clearData() {
+                //只有当时创建组织的时候才需要清除，修改组织信息就不需要清楚
+                //从title判断组建的类型
+                if (this.title == 1 || this.isShow.showDrawer) {
+                    return
+                }
+
+                setTimeout(() => {
+                    this.filesData = null
+
+                    for (let key in this.formData) {
+                        this.formData[key] = ''
+                    }
+
+                    this.imagePath = require('../../../../../assets/images/noimage.png')
+                }, 1000)
+            },
+
+            deStoryComponent() {
+                this.isShow.showDrawer = false
             }
         }
 
