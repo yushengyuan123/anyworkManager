@@ -9,24 +9,26 @@ import Vue from 'vue'
  * @param necessary
  */
 export function interceptors(callback, config = {}, necessary) {
-    if (necessary) {
-        if (config.message) {
-            let successOrFail = null
+    let successOrFail = null
 
-            if (config.status == 1) {
-                successOrFail = 'success'
-                try {
-                    if (callback) {
-                        callback()
-                    }
-                } catch (e) {
-                    throw new Error(e)
-                }
-            } else if (config.status == 0) {
-                successOrFail = 'error'
+    if (config.status) {
+        try {
+            successOrFail = 'success'
+            if (callback) {
+                callback()
             }
-
-            Message[successOrFail](config.message)
+            if (necessary) {
+                if (config.message) {
+                    Message[successOrFail](config.message)
+                }
+            }
+        } catch (e) {
+            successOrFail = 'error'
+            Message[successOrFail](e.message)
+            throw new Error(e.message)
         }
+    } else {
+        successOrFail = 'error'
+        Message[successOrFail](config.message)
     }
 }

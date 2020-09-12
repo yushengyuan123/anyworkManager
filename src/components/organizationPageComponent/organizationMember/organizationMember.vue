@@ -1,5 +1,5 @@
 <template>
-        <div class="member-container" @click.stop="doNothing">
+        <div class="member-container">
             <div class="member-details-container">
                 <div class="member-details-con" v-for="item in memberList" :key="item.key">
                     <img src="../../../assets/images/noimage.png" alt="">
@@ -11,19 +11,18 @@
 </template>
 
 <script>
-    import GlobalLayer from "../../globalLayer/GlobalLayer";
-
     export default {
         name: "organizationMember",
 
-        components: {
-            GlobalLayer: GlobalLayer
+        props: {
+            studentList: {type: Array}
         },
 
-        props: {
-            isShow: {type: Object},
-
-            studentList: {type: Array}
+        watch: {
+            //监控外界学生数组的变化
+            studentList: function () {
+                this.getStudentData()
+            }
         },
 
         data() {
@@ -32,20 +31,14 @@
             }
         },
 
-        mounted() {
-            this.getStudentData()
-        },
-
         methods: {
-            //点击global组件 取消遮罩层
-            cancelLayer() {
-                this.isShow.show = false
-            },
-
             //从外界组件传过来的student信息,转化到data中,再进行视图渲染,如果直接用
             //props就会发生报错
             getStudentData() {
                 const list = this.studentList
+                //推入前先清空一波
+                this.memberList.length = 0
+
                 for (let i = 0; i < list.length; i++) {
                     this.memberList.push({
                         key: list[i].userId,
@@ -54,13 +47,6 @@
                     })
                 }
             },
-
-            //一个过渡事件，当用户点击内容框而遮罩层的时候，阻止事件冒泡。避免点击内容框会导致取消弹窗
-            doNothing() {
-                console.log('do')
-            }
-
-
         }
     }
 </script>

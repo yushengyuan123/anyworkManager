@@ -23,10 +23,12 @@ export function getCurrentDate() {
     return formatDate(new Date())
 }
 
-// 获取上传图片的blob地址
+// 获取上传图片的blob地址 ,用于选择完文件之后 然后马上获取图片地址 进行图片预览
 export function getImageSrc(file) {
     let reader = new FileReader();
+
     reader.readAsArrayBuffer(file);
+
     return new Promise((resolve, reject) => {
         reader.onload = (event) => {
             let blob = new Blob([event.target.result]);

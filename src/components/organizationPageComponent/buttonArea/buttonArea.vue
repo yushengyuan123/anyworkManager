@@ -5,15 +5,9 @@
                 :title="0"
         ></drawer>
 
-        <Dropdown>
-            <a href="javascript:void(0)">
-                下拉菜单
-                <Icon type="ios-arrow-down"></Icon>
-            </a>
-            <DropdownMenu slot="list">
-                <DropdownItem v-for="item in paperList" :key="item.id">{{item.title}}</DropdownItem>
-            </DropdownMenu>
-        </Dropdown>
+        <Select v-model="currentFocus" style="width:200px" @on-change="statusChange">
+            <Option v-for="item in paperList" :value="item.testpaperId" :key="item.id">{{ item.title }}</Option>
+        </Select>
 
         <Button type="primary" shape="circle" style="margin-left: 8rem" @click="openCreateMenu">创建组织</Button>
     </div>
@@ -21,7 +15,9 @@
 
 <script>
     import OrganizationApi from "../../../share/api/organizationApi";
-    import drawer from "../myOrganization/organizationCard/drawer/drawer";
+    import drawer from "../drawer/drawer";
+    import {interceptors} from "../../../share/net/response";
+    import {mapMutations} from "vuex";
 
     export default {
         name: "buttonArea",
@@ -35,6 +31,8 @@
                 //试卷列表数组
                 paperList: [],
 
+                currentFocus: '',
+
                 showCreateMenu: {showDrawer: false},
             }
         },
@@ -43,27 +41,44 @@
             this.getPaperList()
         },
 
+        computed: {
+
+        },
+
         methods: {
+            ...mapMutations(['currentPaperChange']),
             //获取试卷列表
             getPaperList() {
                 OrganizationApi.getExaminationPaperList().then(res => {
-                    // console.log(res.data)
-                    // this.dataControl(res.data)
+                    interceptors(() => {
+                        this.renderData(res.data)
+                        this.$store.commit('addPaper', res.data)
+                    }, {
+                        message: res.stateInfo,
+                        status: res.state
+                    }, false)
                 })
             },
 
-            dataControl(arr) {
+            renderData(arr) {
                 arr.forEach((item, index) => {
                     this.paperList.push({
                         id: index,
-                        title: item.testpaperTitle
+                        title: item.testpaperTitle,
+                        testpaperId: item.testpaperId.toString(),
                     })
                 })
             },
 
             openCreateMenu() {
                 this.showCreateMenu.showDrawer = true
+            },
+
+            //当选择改变时对应改变试卷
+            statusChange() {
+                this.currentPaperChange(this.currentFocus)
             }
+
         }
     }
 </script>

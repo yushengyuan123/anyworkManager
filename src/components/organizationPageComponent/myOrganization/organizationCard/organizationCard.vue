@@ -48,9 +48,10 @@
 </template>
 
 <script>
-    import drawer from "./drawer/drawer";
+    import drawer from "../../drawer/drawer";
     import OrganizationApi from "../../../../share/api/organizationApi";
-    import {interceptors, interceptorsRes} from "../../../../share/net/response";
+    import {interceptors} from "../../../../share/net/response";
+    import {mapMutations} from "vuex";
 
     export default {
         name: "organizationCard",
@@ -102,6 +103,8 @@
         },
 
         methods: {
+            ...mapMutations(['notifyFlush']),
+
             //打开编辑右侧栏
             openEditDrawer() {
                 this.showEdit.showDrawer = true
@@ -122,7 +125,8 @@
             deleteOrganization() {
                 OrganizationApi.deleteOrganization({organizationId: this.organizationId}).then(res => {
                     interceptors(() => {
-                        this.$emit('updateOrganization')
+                        //通知视图更新
+                        this.notifyFlush(true)
                     }, {
                         message: res.stateInfo,
                         status: res.state

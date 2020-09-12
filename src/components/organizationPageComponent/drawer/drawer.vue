@@ -48,10 +48,10 @@
 </template>
 
 <script>
-    import {formatDate} from "../../../../../share/utils/globalUtils";
-    import organizationApi from "../../../../../share/api/organizationApi";
-    import {interceptors} from "../../../../../share/net/response";
-    import * as globalUtils from '../../../../../share/utils/globalUtils'
+    import organizationApi from "../../../share/api/organizationApi";
+    import {interceptors} from "../../../share/net/response";
+    import * as globalUtils from '../../../share/utils/globalUtils'
+    import {mapGetters, mapMutations} from "vuex";
 
     export default {
         props: {
@@ -59,7 +59,7 @@
             //组件复用传值，如果这个值为true，
             isCreate: {type: Object},
             //头像url
-            imageUrl: {type: String, default: require('../../../../../assets/images/noimage.png')},
+            imageUrl: {type: String, default: require('../../../assets/images/noimage.png')},
             //标题，为什么会有这个字段原因在于，这个组件是被复用的，创建和编辑都是用这个组件
             //0是创建 1是修改
             title: {type: Number | String},
@@ -89,7 +89,7 @@
                 formData: {
                     organizationName: this.organizationName,
                     token: this.token,
-                    description: this.desc
+                    description: this.desc,
                 },
 
                 filesData: null,
@@ -101,7 +101,9 @@
         computed: {
             componentTitle() {
                 return this.title ? '修改组织' : '创建组织'
-            }
+            },
+
+            ...mapGetters(['getFlush'])
         },
 
 
@@ -113,6 +115,9 @@
         },
 
         methods: {
+            //通过store 修改状态，通知card组件重新请求数据进行视图更新
+            ...mapMutations(['notifyFlush']),
+
             //提交信息前的确认
             submitConfirm() {
                 this.$Modal.confirm({
@@ -130,17 +135,37 @@
 
                 //遍历formData，循环添加append
                 for (let key in requestKey) {
+                    //创建和修改请求的格式做区分
+                    if (key === 'token' && this.title == 1) {
+                        this.filesData.append('organizationId', this.organizationId)
+                        continue
+                    }
                     this.filesData.append(key, requestKey[key])
                 }
 
-                organizationApi.createOrganization(this.filesData).then(res => {
-                    interceptors(() => {
-                        this.isShow.showDrawer = false
-                    }, {
-                        message: res.stateInfo,
-                        status: res.state
-                    }, true)
-                })
+                if (this.title == 0) {
+                    organizationApi.createOrganization(this.filesData).then(res => {
+                        interceptors(() => {
+                            this.isShow.showDrawer = false
+                            //通知card组件重新请求数据进行视图更新
+                            this.notifyFlush(true)
+                        }, {
+                            message: res.stateInfo,
+                            status: res.state
+                        }, true)
+                    })
+                } else {
+                    organizationApi.editOrg(this.filesData).then(res => {
+                        interceptors(() => {
+                            this.isShow.showDrawer = false
+                            //通知card组件重新请求数据进行视图更新
+                            this.notifyFlush(true)
+                        }, {
+                            message: res.stateInfo,
+                            status: res.state
+                        }, true)
+                    })
+                }
             },
 
             //文件上传 当修改上传文件的时候触发这个方法
@@ -175,7 +200,7 @@
                         this.formData[key] = ''
                     }
 
-                    this.imagePath = require('../../../../../assets/images/noimage.png')
+                    this.imagePath = require('../../../assets/images/noimage.png')
                 }, 1000)
             },
 

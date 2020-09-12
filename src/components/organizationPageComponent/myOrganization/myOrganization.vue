@@ -25,7 +25,6 @@
                 <div class="details-container">
                     <organizationMember
                             :studentList="organizationStudent"
-                            v-if="show"
                     ></organizationMember>
                 </div>
             </TabPane>
@@ -35,10 +34,11 @@
 
 <script>
     import organizationCard from "./organizationCard/organizationCard";
-    import drawer from "./organizationCard/drawer/drawer";
+    import drawer from "../drawer/drawer";
     import organizationMember from "../organizationMember/organizationMember";
     import organizationApi from "../../../share/api/organizationApi";
     import {interceptors} from "../../../share/net/response";
+    import {mapGetters, mapMutations} from "vuex";
 
     export default {
         name: "myOrganization",
@@ -65,20 +65,41 @@
 
                 //目前被选中的tab的name
                 currentFocus: '-1',
-
-                show: false
             }
         },
 
         mounted() {
             this.getOrganizationMember()
+
             this.getClassRank()
-            // this.openLayer(28)
+        },
+
+        computed: {
+            ...mapGetters(['getFlush']),
+        },
+
+        watch: {
+            currentFocus: function (newValue, oldValue) {
+                this.currentOrgChange(newValue)
+            },
+
+            getFlush: function (newValue, oldValue) {
+                if (newValue === true) {
+                    this.getOrganizationMember()
+
+                    this.notifyFlush(false)
+                }
+            }
         },
 
         methods: {
+            //通过store 修改状态，通知card组件重新请求数据进行视图更新
+            ...mapMutations(['notifyFlush']),
+
+            ...mapMutations(['currentOrgChange']),
+
             //获取组织信息。在organizationCard执行删除逻辑后，子组件emit调用本方法重新渲染视图
-            getOrganizationMember(param) {
+            getOrganizationMember() {
                 //这里是为了在删除之后重新请求的时候先清空list，否则会造成有重复元素
                 if (this.organizationList) {
                     this.organizationList.length = 0
@@ -102,33 +123,27 @@
                         studentNumber: arr[i].count
                     })
                 }
-                console.log(this.organizationList)
             },
 
+            //点击tab 获取单个组织学生列表
             getSingleOrgStudent(organizationId) {
+                //-1 代表用户点击的是获取全部组织 此时不需要要去获得单个学生的列表
+                if (organizationId == -1) {
+                    return
+                }
                 //再复制之前,先清空这个数组,再去重新获取新的学生数据
                 this.studentList.length = 0
 
                 organizationApi.getOrganizationStudent({organizationId: organizationId}).then(res => {
                     interceptors(() => {
                         this.organizationStudent = res.data
-                        this.show = true
                     }, {
                         message: res.stateInfo,
                         status: res.state
-                    }, true)
+                    }, false)
                 })
             },
 
-
-            //把后端返回的数组逐个复制到studentList中
-            // 因为它是外界传过来的data,不能直接去修改它的引用
-            //否则vue会给出报错
-            copyDataToProps(data) {
-                for (let i = 0; i < data.length; i++) {
-                    this.studentRankList.push(data[i])
-                }
-            },
 
             //点击tab切换组织，重新请求数组更新organizationList
             switchOrganization() {
@@ -142,7 +157,7 @@
                 param = param || ''
 
                 if (param == -1) {
-                    return
+                    param = ''
                 }
 
                 this.$emit('updateRankList', {

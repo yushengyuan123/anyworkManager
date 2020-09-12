@@ -10,13 +10,13 @@ export default class OrganizationApi extends request {
     }
 
     //获取学生组织
-    static getMyOrganization (data, param = '') {
-         return this.postMethods('/organization/myOrganization/' + param , data)
+    static getMyOrganization(data) {
+        return this.postMethods('/organization/myOrganization', data)
     }
 
     //获取某个组织学生的成绩排名
-    static getMemberList(data) {
-        return this.postMethods('/leaderboard/teacher/show', data)
+    static getMemberList(data, param = '') {
+        return this.postMethods('/leaderboard/teacher/show/' + param, data)
     }
 
     //获取所有的试卷
@@ -34,7 +34,13 @@ export default class OrganizationApi extends request {
         return this.postMethods('/organization/delete', data)
     }
 
+    //创建组织
     static createOrganization(data) {
         return this.formDateMethods('/organization/create', data)
+    }
+
+    //修改组织
+    static editOrg(data) {
+        return this.formDateMethods('/organization/alter', data)
     }
 }
