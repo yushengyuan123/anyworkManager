@@ -5,7 +5,7 @@ const _Request = axios.create({
     baseURL: process.env.VUE_APP_URL,
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': '2d3ccd6d-b31f-431a-aae7-4083b7eb5702'
+        'Authorization': 'b75d3ebf-cba8-454f-82fa-d474ad700965'
     },
 });
 
@@ -17,7 +17,7 @@ _Request.interceptors.request.use((config) => {
     if (localStorage.getItem("Authorization")) {
         config.headers['Authorization'] = JSON.parse(localStorage.getItem("Authorization")).value;
     }
-    console.log(config.headers)
+
     return config
 }, error => {
     //403

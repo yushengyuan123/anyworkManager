@@ -49,21 +49,25 @@
 
   }
 
+  $fontSize: 1rem;
   .icon {
     width: 15%;
   }
 
   .name {
     width: 15%;
+    font-size: $fontSize;
   }
 
   .studentId {
     width: 15%;
+    font-size: $fontSize;
   }
 
   .score {
     width: 20%;
     font-size: 25px;
     color: #2d8cf0;
+
   }
 }
