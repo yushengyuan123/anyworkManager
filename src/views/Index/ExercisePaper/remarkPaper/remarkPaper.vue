@@ -95,16 +95,14 @@ export default {
     dataControl(arr) {
       arr.forEach((item, index) => {
         this.allData.push({
-          /* testpaperId: testpaperId, */
           name: item.testpaperTitle,
           createTime: item.createTime,
           endingTime: item.endingTime,
         });
         this.paperId.push(item.testpaperId);
       });
-      this.totalPaper = arr.length;
-      this.data6 = this.allData.slice(0, this.pageSize);
-      //alert(this.paperId);
+      this.totalPaper = arr.length;// 试卷总数
+      this.data6 = this.allData.slice(0, this.pageSize);// 显示当前页面
     },
 
     /* 分页 */
@@ -130,5 +128,6 @@ export default {
 }
 .remarkPaper-page {
   margin-top: 16px;
+  text-align: center;
 }
 </style>
