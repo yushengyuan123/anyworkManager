@@ -98,7 +98,8 @@
         let send = {
           password: this.password,
           studentId: this.studentId,
-          valcode: 0
+          valcode: 0,
+          isTeacher: 1,
         }
         if (!this.judeg()) {
           return;
