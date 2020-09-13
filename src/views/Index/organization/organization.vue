@@ -68,7 +68,6 @@
         },
 
         methods: {
-            //这里是组件MyOrganization 通过emit触发的方法 从这里获取到rank 传入组件rank中
             getRankList({testPaperId, organizationId}) {
                 if (organizationId == -1) {
                     return

@@ -48,18 +48,25 @@
 
         methods: {
             renderData(arr) {
-                //渲染前先清空studentList
-                this.studentList.length = 0
+                //如果arr为空的情况下 需要手动清除studentList 否则视图是不会更新的 这是vue数组响应式的缺陷
+                if (!arr.length) {
+                    while (this.studentList.length) {
+                        this.studentList.pop()
+                    }
+                } else {
+                    //渲染前先清空studentList
+                    this.studentList.length = 0
 
-                arr.forEach((item, index) => {
-                    this.studentList.push({
-                        rank: index + 1,
-                        imgUrl: item.imagePath,
-                        name: item.username,
-                        id: item.studentId,
-                        score: item.score
+                    arr.forEach((item, index) => {
+                        this.studentList.push({
+                            rank: index + 1,
+                            imgUrl: item.imagePath,
+                            name: item.username,
+                            id: item.studentId,
+                            score: item.score
+                        })
                     })
-                })
+                }
             }
         }
     }

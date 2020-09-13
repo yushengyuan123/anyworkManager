@@ -52,7 +52,7 @@
     components: {
       loginCon,
       regCon,
-      forgetPass
+      forgetPass,
     },
     data() {
       return {

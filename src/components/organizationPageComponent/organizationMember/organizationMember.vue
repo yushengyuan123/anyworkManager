@@ -32,19 +32,24 @@
         },
 
         methods: {
-            //从外界组件传过来的student信息,转化到data中,再进行视图渲染,如果直接用
-            //props就会发生报错
             getStudentData() {
-                const list = this.studentList
-                //推入前先清空一波
-                this.memberList.length = 0
+                //如果array长度为0的情况下 需要手动清除memberList 否则视图是不会更新的 这是vue数组响应式的缺陷
+                if (!this.studentList.length) {
+                    while (this.memberList.length) {
+                        this.memberList.pop()
+                    }
+                } else {
+                    const list = this.studentList
+                    //推入前先清空一波
+                    this.memberList.length = 0
 
-                for (let i = 0; i < list.length; i++) {
-                    this.memberList.push({
-                        key: list[i].userId,
-                        name: list[i].userName,
-                        studentId: list[i].studentId
-                    })
+                    for (let i = 0; i < list.length; i++) {
+                        this.memberList.push({
+                            key: list[i].userId,
+                            name: list[i].userName,
+                            studentId: list[i].studentId
+                        })
+                    }
                 }
             },
         }

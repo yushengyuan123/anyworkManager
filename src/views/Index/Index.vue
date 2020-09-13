@@ -19,7 +19,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
     .layout-container {
         position: relative;
         display: flex;

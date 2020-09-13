@@ -1,14 +1,15 @@
 <template>
     <div class="organization-card-container">
-        <drawer
-                :show="showEdit"
+        <editForm
+                v-if="showEdit"
                 :imageUrl="imageUrl"
                 :token="description[1].value"
                 :desc="description[2].value"
                 :organizationName="organizationName"
                 :organizationId="organizationId"
                 :title="1"
-        ></drawer>
+                @close="closeEdit"
+        ></editForm>
 
         <div class="header-title-container">
             <div class="image-container">
@@ -48,16 +49,16 @@
 </template>
 
 <script>
-    import drawer from "../../drawer/drawer";
     import OrganizationApi from "../../../../share/api/organizationApi";
     import {interceptors} from "../../../../share/net/response";
     import {mapMutations} from "vuex";
+    import editForm from "../../editForm/editForm";
 
     export default {
         name: "organizationCard",
 
         components: {
-            drawer: drawer
+            editForm
         },
 
         props: {
@@ -78,7 +79,7 @@
 
         data() {
             return {
-                showEdit: {showDrawer: false},
+                showEdit: false,
 
                 imageUrl: process.env.VUE_APP_URL + this.imagePath.replace('/anywork', ''),
 
@@ -107,7 +108,7 @@
 
             //打开编辑右侧栏
             openEditDrawer() {
-                this.showEdit.showDrawer = true
+                this.showEdit = true
             },
 
             //删除组织前的确认操作
@@ -132,6 +133,11 @@
                         status: res.state
                     }, true)
                 })
+            },
+
+            //关闭弹窗
+            closeEdit() {
+                this.showEdit = false
             }
         }
     }

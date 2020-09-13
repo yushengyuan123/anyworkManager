@@ -1,13 +1,18 @@
-.demo-drawer-footer {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  border-top: 1px solid #e8e8e8;
-  padding: 10px 16px;
-  text-align: right;
-  background: #fff;
+.edit-form-container {
+  height: 70%;
+  width: 50%;
+  background-color: white;
+  padding: 2rem 5rem 2rem 5rem;
+  border-radius: 10px;
 }
+
+.title-container {
+  $height: 3rem;
+  height: $height;
+  line-height: $height;
+  text-align: center;
+}
+
 
 @mixin share {
   $size: 100px;
