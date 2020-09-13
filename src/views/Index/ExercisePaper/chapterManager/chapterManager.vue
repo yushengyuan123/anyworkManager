@@ -49,108 +49,90 @@
 <template>
   <div class="chapterManager">
     <div class="dataCon">
-      <div class="list" v-for="(data, index) in chapterArr" :key="index">
-        <span class="text">
-          {{data.chapterName}}<Icon type="md-create"/>
+      <div class="list" v-for="(chapter, index) in chapterArr" :key="index">
+        <span class="text" @click="editClick(chapter)">
+          {{chapter.chapterName}}<Icon type="md-create"/>
         </span>
-        <Icon class="del" type="md-close"/>
+        <Icon class="del" type="md-close" @click="delClick(chapter)"/>
       </div>
-      <Button class="add" type="dashed" @click="add">+ 添加章节</Button>
+      <Button class="add" type="dashed" @click="addClick">+ 添加章节</Button>
     </div>
+    <chapterModel :control="myModelControl" @getChapter="getChapter"></chapterModel>
   </div>
 </template>
 
 <script>
+  import chapterModel from "../../../../components/chapterManager/chapterModel/chapterModel";
+  import chapterApi from "../../../../share/api/chapterApi";
+
   export default {
     name: "chapterManager",
+    components: {
+      chapterModel
+    },
     data() {
       return {
         chapterArr: null,
-        addValue: ''
+        addValue: '',
+        myModelControl: {
+          type: 0, // 0-> 编辑章节名   1-> 新建章节
+          ifShow: false, // 是否展示Modal
+          chapterId: '', // 章节id
+          chapterName: '', // 章节名字
+        }
       }
     },
     methods: {
+      // 请求全部章节
       getChapter() {
-        this.chapterArr = [
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 106, organizationId: 28, chapterName: "指针", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-          {chapterId: 108, organizationId: 28, chapterName: "初始C语言", userId: 2},
-        ]
-      },
-      add() {
-        this.$Modal.confirm({
-          title: '添加章节',
-          render: (h) => {
-            return h('Input', {
-              props: {
-                value: this.addValue,
-                autofocus: true,
-                placeholder: '请输入你想添加的章节..'
-              },
-              on: {
-                input: vl => {
-                  this.addValue = vl;
-                }
-              }
-            })
-          },
-          onOk: () => {
-            console.log(this.addValue);
-            this.addValue = '';
+        chapterApi.getChapter().then(res => {
+          if (res.state == 1) {
+            this.chapterArr = res.data;
+          } else {
+            this.$Message.warning(res.stateInfo)
           }
         })
       },
-      del() {
+      // 点击添加章节
+      addClick() {
+        this.myModelControl.type = 1;
+        this.myModelControl.ifShow = true;
+        this.myModelControl.chapterId = '';
+        this.myModelControl.chapterName = '';
+
       },
-      edit() {
+      // 点击编辑章节
+      editClick(chapter) {
+        this.myModelControl.type = 0;
+        this.myModelControl.ifShow = true;
+        this.myModelControl.chapterId = chapter.chapterId;
+        this.myModelControl.chapterName = chapter.chapterName;
+
       },
+      delClick(chapter) {
+        this.$Modal.confirm({
+          title: '确认删除',
+          content: `你确定删除章节<strong>《${chapter.chapterName}》</strong>吗`,
+          onOk: () => {
+            this.delChapter(chapter);
+          },
+        });
+      },
+      // 删除章节
+      delChapter(chapter) {
+        let send = {
+          chapterId: chapter.chapterId
+        }
+        chapterApi.delChapter(send).then(res=>{
+          if (res.state == 1) {
+            this.$Message.success('删除成功');
+            this.getChapter();
+          } else {
+            this.$Message.warning(res.stateInfo)
+          }
+        })
+      },
+
 
     },
     mounted() {
