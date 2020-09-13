@@ -14,14 +14,20 @@
       class="remarkPaper-page"
       @on-change="changePage"
     />
+    <studentList :modal1="modal1" @transferM="getSon" ref="student" :passPaperId="passPaperId"></studentList>
   </div>
 </template>
 
 <script>
 import organizationApi from "../../../../share/api/organizationApi";
+import studentList from "../../../../components/studentList/studentList"
 
 export default {
   name: "remarkPaper",
+
+  components:{
+    studentList: studentList
+  },
 
   data() {
     return {
@@ -55,6 +61,9 @@ export default {
       paperId: [],
       pageSize: 15,
       nowPage: 0,
+      /* 传给studentList组件的值*/
+      modal1: false,
+      passPaperId:''
     };
   },
 
@@ -65,12 +74,11 @@ export default {
   methods: {
     /* 完成情况显示隐藏 */
     show(index) {
-      this.$Modal.info({
-        title: `${index}`,
-        content: `Name：${this.data6[index].name}<br>id:
-        ${this.paperId[index + this.nowPage * this.pageSize]}`,
-        /* 获取当前试卷ID */
-      });
+      /* 获取当前试卷ID */
+      this.passPaperId = this.paperId[index + this.nowPage * this.pageSize];
+      this.modal1 = true;
+      /*调用studentList组件里的方法*/
+      this.$refs.student.getTest(this.passPaperId);
     },
     remove(index) {
       this.data6.splice(index, 1);
@@ -87,16 +95,14 @@ export default {
     dataControl(arr) {
       arr.forEach((item, index) => {
         this.allData.push({
-          /* testpaperId: testpaperId, */
           name: item.testpaperTitle,
           createTime: item.createTime,
           endingTime: item.endingTime,
         });
         this.paperId.push(item.testpaperId);
       });
-      this.totalPaper = arr.length;
-      this.data6 = this.allData.slice(0, this.pageSize);
-      //alert(this.paperId);
+      this.totalPaper = arr.length;// 试卷总数
+      this.data6 = this.allData.slice(0, this.pageSize);// 显示当前页面
     },
 
     /* 分页 */
@@ -106,6 +112,10 @@ export default {
       this.data6 = this.allData.slice(_start, _end);
       this.nowPage = index - 1;
     },
+    /*获得子组件传来的值*/
+    getSon(msg){
+      this.modal1 = msg;
+    }
   },
 };
 </script>
@@ -118,5 +128,6 @@ export default {
 }
 .remarkPaper-page {
   margin-top: 16px;
+  text-align: center;
 }
 </style>
