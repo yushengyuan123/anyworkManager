@@ -39,6 +39,11 @@ const routes = [
                         component: ()=> import('../views/Index/ExercisePaper/chapterManager/chapterManager')
                     }
                 ]
+            },
+            {
+                path: 'sendNotice',
+                name: 'sendNotice',
+                component: () => import('../views/Index/sendNotice/sendNotice')
             }
         ]
     },

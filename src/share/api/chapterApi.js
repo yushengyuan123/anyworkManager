@@ -2,7 +2,7 @@ import request from "../net/request";
 
 /**
  * @author 树干
- * 添加章节、编辑章节、删除章节
+ * 请求章节、添加章节、编辑章节、删除章节
  */
 export default class ExerciseApi extends request {
   constructor() {
