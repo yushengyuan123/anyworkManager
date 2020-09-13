@@ -32,6 +32,11 @@ const routes = [
                         path: 'remarkPaper',
                         name: 'remarkPaper',
                         component: () => import('../views/Index/ExercisePaper/remarkPaper/remarkPaper'),
+                    },
+                    {
+                        path: 'chapterManager',
+                        name: 'chapterManager',
+                        component: ()=> import('../views/Index/ExercisePaper/chapterManager/chapterManager')
                     }
                 ]
             }
