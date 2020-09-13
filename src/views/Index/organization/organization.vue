@@ -1,17 +1,18 @@
 <template>
     <div class="organization-container">
-        <buttonArea></buttonArea>
-
-        <myOrganization
-                :isShow="memberShow"
-                :studentList="studentList"
-                @updateRankList="getRankList"
-        ></myOrganization>
-
-        <rank
-                :rank="rankList"
-        >
-        </rank>
+        <div>
+            <buttonArea></buttonArea>
+        </div>
+        <div>
+            <myOrganization
+                    :isShow="memberShow"
+                    :studentList="studentList"
+                    @updateRankList="getRankList"
+            ></myOrganization>
+        </div>
+        <div>
+            <rank :rank="rankList"></rank>
+        </div>
     </div>
 </template>
 
@@ -67,7 +68,6 @@
         },
 
         methods: {
-            //这里是组件MyOrganization 通过emit触发的方法 从这里获取到rank 传入组件rank中
             getRankList({testPaperId, organizationId}) {
                 if (organizationId == -1) {
                     return

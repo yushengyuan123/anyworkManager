@@ -1,9 +1,15 @@
 <template>
     <div class="btn-container">
         <drawer
-                :show="showCreateMenu"
-                :title="0"
+
         ></drawer>
+
+        <editForm
+                v-if="showCreateMenu"
+                :title="0"
+                @close="closeEdit"
+        >
+        </editForm>
 
         <Select v-model="currentFocus" style="width:200px" @on-change="statusChange">
             <Option v-for="item in paperList" :value="item.testpaperId" :key="item.id">{{ item.title }}</Option>
@@ -15,15 +21,15 @@
 
 <script>
     import OrganizationApi from "../../../share/api/organizationApi";
-    import drawer from "../drawer/drawer";
     import {interceptors} from "../../../share/net/response";
     import {mapMutations} from "vuex";
+    import editForm from "../editForm/editForm";
 
     export default {
         name: "buttonArea",
 
         components: {
-            drawer: drawer
+            editForm
         },
 
         data() {
@@ -33,7 +39,7 @@
 
                 currentFocus: '',
 
-                showCreateMenu: {showDrawer: false},
+                showCreateMenu: false,
             }
         },
 
@@ -71,12 +77,17 @@
             },
 
             openCreateMenu() {
-                this.showCreateMenu.showDrawer = true
+                this.showCreateMenu = true
             },
 
             //当选择改变时对应改变试卷
             statusChange() {
                 this.currentPaperChange(this.currentFocus)
+            },
+
+            //关闭痰喘
+            closeEdit() {
+                this.showCreateMenu = false
             }
 
         }

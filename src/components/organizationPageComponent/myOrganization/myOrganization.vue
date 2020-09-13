@@ -1,6 +1,6 @@
 <template>
     <div class="my-organization">
-        <Tabs v-model:value="currentFocus" @on-click="switchOrganization">
+        <Tabs v-model:value="currentFocus" @on-click="switchOrganization" :animated="false">
             <TabPane label="所有组织" name="-1">
                 <div class="details-container">
                     <organizationCard
@@ -34,7 +34,6 @@
 
 <script>
     import organizationCard from "./organizationCard/organizationCard";
-    import drawer from "../drawer/drawer";
     import organizationMember from "../organizationMember/organizationMember";
     import organizationApi from "../../../share/api/organizationApi";
     import {interceptors} from "../../../share/net/response";
@@ -45,7 +44,6 @@
 
         components: {
             organizationCard: organizationCard,
-            drawer: drawer,
             organizationMember: organizationMember
         },
 
@@ -98,6 +96,9 @@
 
             ...mapMutations(['currentOrgChange']),
 
+            //store获取当前用户选择试卷的id
+            ...mapGetters(['getCurrentPaperId']),
+
             //获取组织信息。在organizationCard执行删除逻辑后，子组件emit调用本方法重新渲染视图
             getOrganizationMember() {
                 //这里是为了在删除之后重新请求的时候先清空list，否则会造成有重复元素
@@ -135,12 +136,7 @@
                 this.studentList.length = 0
 
                 organizationApi.getOrganizationStudent({organizationId: organizationId}).then(res => {
-                    interceptors(() => {
-                        this.organizationStudent = res.data
-                    }, {
-                        message: res.stateInfo,
-                        status: res.state
-                    }, false)
+                    this.organizationStudent = res.data || []
                 })
             },
 
@@ -161,7 +157,7 @@
                 }
 
                 this.$emit('updateRankList', {
-                    testPaperId: 0,
+                    testPaperId: this.getCurrentPaperId(),
                     organizationId: param
                 })
             },

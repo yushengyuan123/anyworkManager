@@ -1,61 +1,54 @@
-<!— 这个是点击组件那个card 组件的编辑按钮 然后在屏幕左侧弹出的一个编辑框组件 直接调用iview库-->
 <template>
-    <Drawer
-            :title="componentTitle"
-            v-model="isShow.showDrawer"
-            width="720"
-            :mask-closable="false"
-            :styles="styles"
-    >
-        <Form :model="formData">
-            <Row :gutter="32">
-                <Col span="12">
-                    <FormItem label="组织头像" label-position="top">
-                        <div class="image-upload-container">
-                            <img :src="imagePath">
-                            <input class="image-upload" type="file" @change="upload">
-                        </div>
-                    </FormItem>
-                </Col>
-            </Row>
+    <GlobalLayer>
+        <div class="edit-form-container">
+            <div class="title-container">{{componentTitle}}</div>
 
-            <Row :gutter="32">
-                <Col span="12">
-                    <FormItem label="组织名称" label-position="top">
-                        <Input
-                                v-model="formData.organizationName"
-                                placeholder="请输入组织名称"
-                                :disabled="!!drawTitle"
-                        />
-                    </FormItem>
-                </Col>
-                <Col span="12">
-                    <FormItem label="组织口令" label-position="top">
-                        <Input v-model="formData.token" placeholder="请输入组织口令"/>
-                    </FormItem>
-                </Col>
-            </Row>
-            <FormItem label="组织描述" label-position="top">
-                <Input type="textarea" v-model="formData.description" :rows="4" placeholder="请输入组织描述"/>
-            </FormItem>
-        </Form>
+            <Form ref="formValidate">
+                <Row :gutter="32">
+                    <Col span="12">
+                        <FormItem label="组织头像" label-position="top">
+                            <div class="image-upload-container">
+                                <img :src="imagePath">
+                                <input class="image-upload" type="file" @change="upload">
+                            </div>
+                        </FormItem>
+                    </Col>
+                </Row>
 
-        <div class="demo-drawer-footer">
-            <Button style="margin-right: 8px" @click="deStoryComponent">取消</Button>
-            <Button type="primary" @click="submitConfirm">确定</Button>
+                <FormItem label="组织名称" prop="name">
+                    <Input v-model="formData.organizationName" placeholder="输入组织名称"></Input>
+                </FormItem>
+                <FormItem label="组织口令" prop="mail">
+                    <Input v-model="formData.token" placeholder="输入组织口令"></Input>
+                </FormItem>
+                <FormItem label="组织描述" label-position="top">
+                    <Input type="textarea" v-model="formData.description" :rows="4" placeholder="输入组织描述"/>
+                </FormItem>
+
+                <FormItem>
+                    <Button type="primary" @click="submitConfirm">提交</Button>
+                    <Button style="margin-left: 8px" @click="closeComponent">取消</Button>
+                </FormItem>
+            </Form>
         </div>
-    </Drawer>
+    </GlobalLayer>
 </template>
 
 <script>
+    import GlobalLayer from "../../globalLayer/GlobalLayer";
+    import {mapGetters, mapMutations} from 'vuex'
     import organizationApi from "../../../share/api/organizationApi";
     import {interceptors} from "../../../share/net/response";
     import * as globalUtils from '../../../share/utils/globalUtils'
-    import {mapGetters, mapMutations} from "vuex";
 
     export default {
+        name: "editForm",
+
+        components: {
+            GlobalLayer: GlobalLayer
+        },
+
         props: {
-            show: {type: Object},
             //组件复用传值，如果这个值为true，
             isCreate: {type: Object},
             //头像url
@@ -75,16 +68,7 @@
 
         data() {
             return {
-                isShow: this.show,
-
                 drawTitle: this.title,
-
-                styles: {
-                    height: 'calc(100% - 55px)',
-                    overflow: 'auto',
-                    paddingBottom: '53px',
-                    position: 'static'
-                },
 
                 formData: {
                     organizationName: this.organizationName,
@@ -92,7 +76,7 @@
                     description: this.desc,
                 },
 
-                filesData: null,
+                filesData: new window.FormData(),
 
                 imagePath: this.imageUrl,
             }
@@ -104,14 +88,6 @@
             },
 
             ...mapGetters(['getFlush'])
-        },
-
-
-        mounted() {
-        },
-
-        updated() {
-            this.clearData()
         },
 
         methods: {
@@ -133,20 +109,26 @@
             submitData() {
                 const requestKey = this.formData
 
+                //如果用户没有选择图片，说明她不修改头像 这时需要手动加入file 否则会被400
+                if (!this.filesData.get('file')) {
+                    this.filesData.append('file', null)
+                }
+
                 //遍历formData，循环添加append
                 for (let key in requestKey) {
                     //创建和修改请求的格式做区分
                     if (key === 'token' && this.title == 1) {
-                        this.filesData.append('organizationId', this.organizationId)
+                        this.filesData.append(key, this.organizationId)
                         continue
                     }
+
                     this.filesData.append(key, requestKey[key])
                 }
 
                 if (this.title == 0) {
                     organizationApi.createOrganization(this.filesData).then(res => {
                         interceptors(() => {
-                            this.isShow.showDrawer = false
+                            this.closeComponent()
                             //通知card组件重新请求数据进行视图更新
                             this.notifyFlush(true)
                         }, {
@@ -157,7 +139,7 @@
                 } else {
                     organizationApi.editOrg(this.filesData).then(res => {
                         interceptors(() => {
-                            this.isShow.showDrawer = false
+                            this.closeComponent()
                             //通知card组件重新请求数据进行视图更新
                             this.notifyFlush(true)
                         }, {
@@ -173,8 +155,6 @@
                 let file = event.target.files[0]
 
                 if (!!file) {
-                    this.filesData = new window.FormData()
-
                     this.filesData.append("file", file, file.name)
 
                     globalUtils.getImageSrc(file).then((blobUrl) => {
@@ -185,34 +165,14 @@
                 }
             },
 
-            //当创建的时候需要清除一次数据，否则上次创建的数据就会保留
-            clearData() {
-                //只有当时创建组织的时候才需要清除，修改组织信息就不需要清楚
-                //从title判断组建的类型
-                if (this.title == 1 || this.isShow.showDrawer) {
-                    return
-                }
-
-                setTimeout(() => {
-                    this.filesData = null
-
-                    for (let key in this.formData) {
-                        this.formData[key] = ''
-                    }
-
-                    this.imagePath = require('../../../assets/images/noimage.png')
-                }, 1000)
-            },
-
-            deStoryComponent() {
-                this.isShow.showDrawer = false
+            //触发父组件的关闭方法关闭弹窗
+            closeComponent() {
+                this.$emit('close')
             }
         }
-
-
     }
 </script>
 
 <style scoped lang="scss">
-    @import "drawer";
+        @import "editForm";
 </style>
