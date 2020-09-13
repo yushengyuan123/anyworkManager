@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="score">
-        <input type="number" placeholder="得分"  min="0" :max="list.question.socre" v-model="score" @change="emitToFather,limit(list.question.socre)">
+        <input type="number" placeholder="得分"  min="0" :max="list.question.socre" v-model="score" @change="limit(list.question.socre),emitToFather()">
       </div>
     </div>
     </div>

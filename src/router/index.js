@@ -6,7 +6,12 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        redirect: '/index',
+        redirect: '/login',
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/Login/Login.vue')
     },
     {
         name: 'Index',
@@ -27,6 +32,11 @@ const routes = [
                         path: 'remarkPaper',
                         name: 'remarkPaper',
                         component: () => import('../views/Index/ExercisePaper/remarkPaper/remarkPaper'),
+                    },
+                    {
+                        path: 'chapterManager',
+                        name: 'chapterManager',
+                        component: ()=> import('../views/Index/ExercisePaper/chapterManager/chapterManager')
                     }
                 ]
             }

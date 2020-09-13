@@ -1,7 +1,8 @@
 <template>
   <div>
-    <Button type="primary" @click="modal1 = true,getTestDetails(stu)">查看</Button>
-    <Modal v-model="modal1" title="Common Modal dialog box title" @on-ok="ok" @on-cancel="cancel">
+    <Button type="primary" size="small" @click="showDetails(index)">查看</Button>
+    <!-- 查看页面 -->
+    <Modal v-model="modal1" :title="studentData[index].studentName + '的答题情况'" @on-ok="ok">
       <ul class="testDetails" v-for="(item,key) in testList" :key="key">
         <li>
           <choiceQuestion v-show="item.question.type == 1" :details="item" />
@@ -11,12 +12,12 @@
         </li>
       </ul>
     </Modal>
-
-    <Button type="success" @click="modal2 = true,getSubject(stu)">评卷</Button>
-    <Modal v-model="modal2" title="答题情况" @on-ok="commitMark(testResult)" @on-cancel="cancel">
+    <!-- 评分页面 -->
+    <Button class="detail-btn" type="success" size="small" @click="showMark(index)">评卷</Button>
+    <Modal v-model="modal2" :title="studentData[index].studentName + '的简答题情况'"  @on-ok="commitMark(testResult)" @on-cancel="cancel">
       <ul class="testDetails" v-for="(item,key) in markList" :key="key">
         <li>
-          <subjectMark :list="item" @mark-item="pushToRes" />
+          <subjectMark @mark-item="getSon" :list="item"  />
         </li>
       </ul>
     </Modal>
@@ -31,30 +32,55 @@ import subjectMark from "./subjectMark/subjectMark";
 import testDetailsApi from "../../share/api/testDetailsApi";
 export default {
   name: "testDetails",
-  props: [],
+  props: ["index", "studentData", "testpaperId"],
   data() {
     return {
       modal1: false,
       modal2: false,
       title: "",
+      // 试卷列表
       testList: [],
+      // 评分列表
       markList: [],
+      // 学生试卷信息
       stu: {
-        studentId: 1965,
-        testpaperId: 14
+        studentId: this.studentData[this.index].studentId,
+        testpaperId: this.testpaperId
       },
+      // 老师评卷后的信息，每一道题的结果都在teacherresult里
       testResult: {
-        studentId: 1965,
-        testpaperId: 14,
+        studentId: this.studentData[this.index].studentId,
+        testpaperId: this.testpaperId,
         teacherJudge: []
       }
     };
   },
   methods: {
-    ok() {
-      this.$Message.info("Clicked ok");
+    ok(){
+      this.$Message.success("获取成功");
     },
-    cancel() {
+    cancel(){
+
+    },
+    // 查看学生试卷详情
+    showDetails(index) {
+      //判断是否参加考试
+      if (this.studentData[index].ifAttend == "否") {
+        this.$Message.error("该学生无参加考试！");
+      } else {
+        this.getTestDetails(this.stu);
+        this.modal1 = true;
+      }
+    },
+    // c查看学生简答题评分
+    showMark(index){
+      //判断是否参加考试
+      if (this.studentData[index].ifAttend == "否") {
+        this.$Message.error("该学生无参加考试！");
+      } else {
+        this.getSubject(this.stu);
+        this.modal2 = true;
+      }
     },
     // 获取考试详细信息
     getTestDetails(data) {
@@ -83,8 +109,9 @@ export default {
       });
     },
     // 将子组件返回的每一道题目的值添加到数组中
-    pushToRes(data) {
-      this.testResult.teacherJudge.push(data)
+    getSon(data) {
+      console.log(data)
+      this.testResult.teacherJudge.push(data);
     }
   },
   components: {

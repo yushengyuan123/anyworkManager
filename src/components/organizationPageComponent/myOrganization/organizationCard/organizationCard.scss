@@ -5,7 +5,6 @@
   width: 220px;
   border: 1px solid #a09e9e;
   margin: 0 1rem 0 1rem;
-  cursor: pointer;
 }
 
 $titleHeight: 60px;
@@ -32,6 +31,9 @@ $titleHeight: 60px;
     height: 100%;
     width: calc(100% - #{$width});
     text-align: center;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
     font: {
       size: 1rem;
       weight: bold;
@@ -69,6 +71,9 @@ $infoHeight: 5rem;
       height: $infoHeight / 3;
       line-height: $infoHeight / 3;
       width: calc(100% - #{$desWidth});
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
   }
 }
