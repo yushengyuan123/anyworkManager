@@ -5,7 +5,7 @@
         <strong>{{ row.name }}</strong>
       </template>
       <template slot-scope="{row, index }" slot="action">
-        <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">完成情况</Button>
+        <studentList :index="index" :testData="allData" ref="student"></studentList>
       </template>
     </Table>
     <Page
@@ -14,18 +14,17 @@
       class="remarkPaper-page"
       @on-change="changePage"
     />
-    <studentList :modal1="modal1" @transferM="getSon" ref="student" :passPaperId="passPaperId"></studentList>
   </div>
 </template>
 
 <script>
 import organizationApi from "../../../../share/api/organizationApi";
-import studentList from "../../../../components/studentList/studentList"
+import studentList from "../../../../components/studentList/studentList";
 
 export default {
   name: "remarkPaper",
 
-  components:{
+  components: {
     studentList: studentList
   },
 
@@ -34,22 +33,22 @@ export default {
       columns: [
         {
           title: "试卷标题",
-          slot: "name",
+          slot: "name"
         },
         {
           title: "开始时间",
-          key: "createTime",
+          key: "createTime"
         },
         {
           title: "结束时间",
-          key: "endingTime",
+          key: "endingTime"
         },
         {
           title: "操作",
           slot: "action",
           width: 150,
-          align: "center",
-        },
+          align: "center"
+        }
       ],
       /* 展示数据 */
       data6: [],
@@ -62,8 +61,8 @@ export default {
       pageSize: 15,
       nowPage: 0,
       /* 传给studentList组件的值*/
-      modal1: false,
-      passPaperId:''
+      // modal1: false,
+      passPaperId: ""
     };
   },
 
@@ -72,14 +71,6 @@ export default {
   },
 
   methods: {
-    /* 完成情况显示隐藏 */
-    show(index) {
-      /* 获取当前试卷ID */
-      this.passPaperId = this.paperId[index + this.nowPage * this.pageSize];
-      this.modal1 = true;
-      /*调用studentList组件里的方法*/
-      this.$refs.student.getTest(this.passPaperId);
-    },
     remove(index) {
       this.data6.splice(index, 1);
     },
@@ -88,7 +79,7 @@ export default {
     getDataPaper() {
       organizationApi
         .getExaminationPaperList({ organizationId: 28 })
-        .then((res) => {
+        .then(res => {
           this.dataControl(res.data);
         });
     },
@@ -98,6 +89,7 @@ export default {
           name: item.testpaperTitle,
           createTime: item.createTime,
           endingTime: item.endingTime,
+          testpaperId : item.testpaperId
         });
         this.paperId.push(item.testpaperId);
       });
@@ -111,12 +103,8 @@ export default {
       var _end = index * this.pageSize;
       this.data6 = this.allData.slice(_start, _end);
       this.nowPage = index - 1;
-    },
-    /*获得子组件传来的值*/
-    getSon(msg){
-      this.modal1 = msg;
     }
-  },
+  }
 };
 </script>
 
