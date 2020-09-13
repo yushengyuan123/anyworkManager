@@ -1,12 +1,12 @@
 <template>
     <div>
-        <Button type="primary" @click="getTest">完成情况</Button>
+        <!-- <Button type="primary" @click="getTest(13)">完成情况</Button> -->
         <Modal
             width="1005"
             fontWeight="700"
             v-model="modal1"
             :title="title"
-            @on-ok="ok"
+            @on-ok="cancel"
             @on-cancel="cancel">
             <Table :columns="studentMessage" :data="studentData">
                 <template slot-scope="{ index }" slot="action">
@@ -24,14 +24,15 @@
     
     export default {
         name: "studentList",
+        props:['modal1','passPaperId'],
         data () {
             return {
                 title: ' ',
-                modal1: false,
+                // modal1: false,
                 studentData:[],
                 studentSend:{
                     organizationId: 28,
-                    testpaperId: 13 
+                    testpaperId: '' 
                 },
                 studentMessage: [
                     {
@@ -78,14 +79,21 @@
                 ],
             }
         },
+
         methods: {
-            getTest(){
+            cancel: function(){
+                this.modal1 = false;
+                this.$emit('transferM',this.modal1)
+            },
+            getTest(msg){
                 
+                this.studentSend.testpaperId = msg
                 studentlistApi.getStudentList(this.studentSend).then(res=>{
                     if(res.state == 1){
                         this.$Message.success(res.stateInfo);
-                        this.modal1 = true;
-                        //先清空数组
+                        // this.modal1 = true;
+                        this.title = ' ';
+                        /* 先清空数组 */
                         this.studentData.length = 0;
                         this.handle(res.data);
                     } else {
@@ -95,10 +103,16 @@
             },
             //处理请求的结果
             handle(dataSet){
-                
-                this.title = `${dataSet[0].testpaper.testpaperTitle}(${this.getWhichType(dataSet[0].testpaper.testpaperType)})的完成情况`;
+                if(!dataSet[0].testpaper){
+                    this.title = ' ';
+                } else {
+                    this.title = `${dataSet[0].testpaper.testpaperTitle}(${this.getWhichType(dataSet[0].testpaper.testpaperType)})的完成情况`;
+                }
                 for(let i = 0; i < dataSet.length; i++){
+                    /* 学生试卷信息 */
                     let student = {};
+                    /* 学生id */
+                    student.studentId = dataSet[i].studentId;
                     student.studentNum = dataSet[i].studentNum;
                     student.studentName = dataSet[i].studentName;
                     student.ifCheck = this.ifTrue(dataSet[i].ifCheck);
@@ -118,12 +132,6 @@
                 else if(data == '2') return '预习题';
                 else if(data == '3') return '课后题';
             },
-            ok () {
-                this.$Message.info('Clicked ok');
-            },
-            cancel () {
-                this.$Message.info('Clicked cancel');
-            },
             //查看
             show (index) {
                 //判断是否参加考试
@@ -131,9 +139,11 @@
                     this.$Message.error('该学生无参加考试！');
                 } else {
                     this.$Message.success('获取成功')
+                    //查看面板
                     this.$Modal.info({
                         title: 'User Info',
                         content: `
+                            学生id：${this.studentData[index].studentId}<br>
                             学号： ${this.studentData[index].studentNum}<br>
                             姓名：${this.studentData[index].studentName}<br>
                             是否评分：${this.studentData[index].ifCheck}<br>
@@ -154,7 +164,6 @@
                 } else {
                     this.$Message.info(`第${index+1}个学生有参加考试`)
                 }
-                // this.studentData.splice(index, 1);
             },
         },
     }
