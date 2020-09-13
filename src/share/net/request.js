@@ -5,7 +5,6 @@ const _Request = axios.create({
     baseURL: process.env.VUE_APP_URL,
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'b75d3ebf-cba8-454f-82fa-d474ad700965'
     },
 });
 

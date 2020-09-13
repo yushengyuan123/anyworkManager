@@ -1,17 +1,18 @@
 <template>
     <div class="organization-container">
-        <buttonArea></buttonArea>
-
-        <myOrganization
-                :isShow="memberShow"
-                :studentList="studentList"
-                @updateRankList="getRankList"
-        ></myOrganization>
-
-        <rank
-                :rank="rankList"
-        >
-        </rank>
+        <div>
+            <buttonArea></buttonArea>
+        </div>
+        <div>
+            <myOrganization
+                    :isShow="memberShow"
+                    :studentList="studentList"
+                    @updateRankList="getRankList"
+            ></myOrganization>
+        </div>
+        <div>
+            <rank :rank="rankList"></rank>
+        </div>
     </div>
 </template>
 

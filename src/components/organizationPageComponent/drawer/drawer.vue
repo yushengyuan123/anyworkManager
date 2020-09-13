@@ -25,7 +25,6 @@
                         <Input
                                 v-model="formData.organizationName"
                                 placeholder="请输入组织名称"
-                                :disabled="!!drawTitle"
                         />
                     </FormItem>
                 </Col>
@@ -92,7 +91,7 @@
                     description: this.desc,
                 },
 
-                filesData: null,
+                filesData: new window.FormData(),
 
                 imagePath: this.imageUrl,
             }
@@ -108,6 +107,7 @@
 
 
         mounted() {
+
         },
 
         updated() {
@@ -133,13 +133,21 @@
             submitData() {
                 const requestKey = this.formData
 
+                console.log(this.filesData.get('file'))
+
+                //如果用户没有选择图片，说明她不修改头像 这时需要手动加入file 否则会被400
+                if (!this.filesData.get('file')) {
+                    this.filesData.append('file', null)
+                }
+
                 //遍历formData，循环添加append
                 for (let key in requestKey) {
                     //创建和修改请求的格式做区分
                     if (key === 'token' && this.title == 1) {
-                        this.filesData.append('organizationId', this.organizationId)
+                        this.filesData.append(key, this.organizationId)
                         continue
                     }
+
                     this.filesData.append(key, requestKey[key])
                 }
 
@@ -173,8 +181,6 @@
                 let file = event.target.files[0]
 
                 if (!!file) {
-                    this.filesData = new window.FormData()
-
                     this.filesData.append("file", file, file.name)
 
                     globalUtils.getImageSrc(file).then((blobUrl) => {
@@ -208,8 +214,6 @@
                 this.isShow.showDrawer = false
             }
         }
-
-
     }
 </script>
 
