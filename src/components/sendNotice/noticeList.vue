@@ -1,20 +1,27 @@
 <style scoped lang="scss">
-
+  .noticeList {
+    .noticeTitle {
+      padding-left: 10px;
+      margin: 10px 0;
+      font-size: 20px;
+      border-left: 5px solid #e81a37;
+    }
+  }
+  
 </style>
 
 <template>
   <div class="noticeList">
-    <div class="title">
-
+    <div class="noticeTitle">
+        发布记录
     </div>
-    <div class="noticeCon">
-      <div class="list" v-for="(notice, index) in noticeArr" :key="index">
-        {{notice.content}}
-        <Button @click="delClick(notice)">删除</Button>
-      </div>
-    </div>
-
+    <Table border :columns="noticeHeaders" :data="noticeArr">
+          <template slot-scope="{ index }" slot="action">
+              <Button type="error" size="small" @click="delClick(index)">删除</Button>
+          </template>
+    </Table>
   </div>
+  
 </template>
 
 <script>
@@ -22,19 +29,41 @@
   export default {
     name: 'noticeList',
     props: {
-      noticeArr: Array
+      noticeArr: Array,
     },
     data() {
-      return {}
+      return {
+        /* 传入表格头的值 */
+        noticeHeaders:[
+          {
+            title:'主题',
+            key:'title'
+          },
+          {
+            title:'内容',
+            key:'content'
+          },
+          {
+            title:'时间',
+            key:'createTime'
+          },
+          {
+            title:'操作',
+            slot: "action",
+            width: 200,
+            align: "center"
+          },
+        ]
+      }
     },
     methods: {
       // 点击删除一个公告
-      delClick(notice) {
+      delClick(index) {
         this.$Modal.confirm({
           title: '确认删除',
-          content: `你确定删除公告<strong>${notice.content}</strong>吗`,
+          content: `你确定删除公告 <strong>${this.noticeArr[index].content}</strong> 吗`,
           onOk: () => {
-            this.$emit('delNotice', notice.messageId);
+            this.$emit('delNotice', this.noticeArr[index].messageId);
           },
         });
 

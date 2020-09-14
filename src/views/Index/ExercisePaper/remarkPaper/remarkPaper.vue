@@ -5,7 +5,7 @@
         <strong>{{ row.name }}</strong>
       </template>
       <template slot-scope="{row, index }" slot="action">
-        <studentList :index="index" :testData="allData" ref="student"></studentList>
+        <studentList :index="index" :testData="allData"></studentList>
       </template>
     </Table>
     <Page

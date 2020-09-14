@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <Button type="primary" @click="getTest(13)">完成情况</Button> -->
     <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">完成情况</Button>
     <Modal
       width="1005"
@@ -92,7 +91,6 @@ export default {
   methods: {
     cancel: function() {
       this.modal1 = false;
-      this.$emit("transferM", this.modal1);
     },
     // 获取试卷详细信息
     getTest(msg) {
@@ -122,15 +120,14 @@ export default {
       for (let i = 0; i < dataSet.length; i++) {
         /* 学生试卷信息 */
         let student = {};
-        /* 学生id */
-        student.studentId = dataSet[i].studentId;
-        student.studentNum = dataSet[i].studentNum;
-        student.studentName = dataSet[i].studentName;
-        student.ifCheck = this.ifTrue(dataSet[i].ifCheck);
-        student.object = dataSet[i].object;
-        student.subject = dataSet[i].subject;
-        student.ifAttend = this.ifTrue(dataSet[i].ifAttend);
-        student.testpaperScore = dataSet[i].testpaper.testpaperScore;
+        student.studentId = dataSet[i].studentId; // 学生id 
+        student.studentNum = dataSet[i].studentNum; //学号
+        student.studentName = dataSet[i].studentName; //姓名
+        student.ifCheck = this.ifTrue(dataSet[i].ifCheck);  //是否评分
+        student.object = dataSet[i].object;  //客观题
+        student.subject = dataSet[i].subject;  //主观题
+        student.ifAttend = this.ifTrue(dataSet[i].ifAttend);  //是否参加考试
+        student.testpaperScore = dataSet[i].testpaper.testpaperScore;  //试卷总分
         this.studentData.push(student);
       }
     },
@@ -145,20 +142,20 @@ export default {
     },
     /* 完成情况显示隐藏 */
     show(index) {
-      /* 获取当前试卷ID */
+      /* 面板显示 */
       this.modal1 = true;
-      /*调用studentList组件里的方法*/
+      /*根据试卷id获得对应的数据*/
       this.getTest(this.studentSend.testpaperId);
     },
     //评卷
-    assess(index) {
-      //判断是否参加考试
-      if (this.studentData[index].ifAttend == "否") {
-        this.$Message.error(`该学生无参加考试！`);
-      } else {
-        this.$Message.info(`第${index + 1}个学生有参加考试`);
-      }
-    }
+    // assess(index) {
+    //   //判断是否参加考试
+    //   if (this.studentData[index].ifAttend == "否") {
+    //     this.$Message.error(`该学生无参加考试！`);
+    //   } else {
+    //     this.$Message.info(`第${index + 1}个学生有参加考试`);
+    //   }
+    // }
   }
 };
 </script>

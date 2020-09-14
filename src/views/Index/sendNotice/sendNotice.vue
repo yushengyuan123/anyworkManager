@@ -1,13 +1,27 @@
 <style scoped lang="scss">
+  .sendNotice {
+    margin: 40px 15px;
+    padding: 10px;
 
+    .addBtn {
+      float: right;
+      margin-top: 10px;
+    }
+
+    .sendNotice-page {
+      margin-top: 16px;
+      text-align: center;
+    }
+  }
 </style>
 
 <template>
   <div class="sendNotice">
-    <Button @click="addControl.ifShow=true"> 新建章节</Button>
+    <Button class="addBtn" @click="addControl.ifShow=true"> 新建章节</Button>
     <addNotice :control="addControl" @addNotice="addNotice"></addNotice>
     <noticeList :noticeArr="noticeArr" @delNotice="delNotice"></noticeList>
     <Page
+            class="sendNotice-page"
             :total="total"
             :page-size="pageSize"
             :current="current"
@@ -30,7 +44,7 @@
     },
     data() {
       return {
-        noticeArr: null, // 公告数组
+        noticeArr: [], // 公告数组
         total: 0, // 全部页数
         current: 1, // 当前页数
         pageSize: 10, // 一页显示数量
@@ -50,6 +64,7 @@
       },
       // 获取通知列表
       getNotice() {
+        console.log(this.noticeArr.length);
         let send = {
           pageNum: this.current,
           pageSize: this.pageSize
@@ -68,6 +83,7 @@
             this.$Loading.error(); // 报错，结束loading
             this.$Message.warning(res.stateInfo)
           }
+          console.log(this.noticeArr.length);
         })
       },
       // 请求添加一个公告
@@ -105,7 +121,7 @@
       }
     },
     mounted() {
-      this.getNotice()
+      this.getNotice();
     }
   }
 </script>

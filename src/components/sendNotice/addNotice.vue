@@ -1,5 +1,9 @@
 <style scoped lang="scss">
-
+  
+  .notice-title {
+    margin-bottom: 20px;
+  }
+  
 </style>
 
 <template>
@@ -8,7 +12,7 @@
             v-model="control.ifShow"
             title="新建公告"
             @on-ok="ok">
-      <Input v-model="control.title" placeholder="公告标题" clearable/>
+      <Input class="notice-title" v-model="control.title" placeholder="公告标题" clearable/>
       <Input v-model="control.content" placeholder="公告内容" clearable/>
     </Modal>
   </div>
