@@ -1,4 +1,4 @@
-<style scoped lang="scss">
+<style lang="scss">
   .noticeList {
     .noticeTitle {
       padding-left: 10px;
@@ -6,6 +6,9 @@
       font-size: 20px;
       border-left: 5px solid #e81a37;
     }
+  }
+  .ivu-table-body, ivu-table-overflowX {
+    overflow: hidden;
   }
   
 </style>
