@@ -70,7 +70,7 @@
         methods: {
             getRankList({testPaperId, organizationId}) {
                 if (organizationId == -1) {
-                    return
+                    organizationId = ""
                 }
 
                 organizationId = organizationId || ''

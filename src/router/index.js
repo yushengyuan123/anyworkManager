@@ -16,6 +16,7 @@ const routes = [
     {
         name: 'Index',
         path: '/index',
+        redirect: '/index/organization',
         component: () => import('../views/Index/Index'),
         children: [
             {
