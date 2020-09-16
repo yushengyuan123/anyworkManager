@@ -16,7 +16,7 @@
                 <img :src="imageUrl" alt="">
             </div>
             <div class="text-container">
-                {{organizationName}}
+                {{ organizationName }}
             </div>
         </div>
 
