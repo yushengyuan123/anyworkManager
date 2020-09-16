@@ -74,7 +74,7 @@
       return {
         chapterArr: null,
         addValue: '',
-        myModelControl: {
+        myModelControl: { // 用来控制子组件chapterModel的prop
           type: 0, // 0-> 编辑章节名   1-> 新建章节
           ifShow: false, // 是否展示Modal
           chapterId: '', // 章节id
@@ -95,6 +95,7 @@
       },
       // 点击添加章节
       addClick() {
+        // 重置子组件chapterModel的值
         this.myModelControl.type = 1;
         this.myModelControl.ifShow = true;
         this.myModelControl.chapterId = '';
@@ -103,17 +104,20 @@
       },
       // 点击编辑章节
       editClick(chapter) {
+        // 重置子组件chapterModel的值
         this.myModelControl.type = 0;
         this.myModelControl.ifShow = true;
         this.myModelControl.chapterId = chapter.chapterId;
         this.myModelControl.chapterName = chapter.chapterName;
 
       },
+      // 点击删除章节
       delClick(chapter) {
         this.$Modal.confirm({
           title: '确认删除',
           content: `你确定删除章节<strong>《${chapter.chapterName}》</strong>吗`,
           onOk: () => {
+            // 请求删除章节
             this.delChapter(chapter);
           },
         });
