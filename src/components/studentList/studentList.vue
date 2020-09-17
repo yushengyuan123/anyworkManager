@@ -5,6 +5,7 @@
       width="1005"
       fontWeight="700"
       v-model="modal1"
+      class="student-list"
       :title="title"
       @on-ok="cancel"
       @on-cancel="cancel"
@@ -30,14 +31,14 @@ import testDetails from "../testDetails/testDetails";
 
 export default {
   name: "studentList",
-  props: ['index',"testData"],
+  props: ['index',"testData","organizationId"],
   data() {
     return {
       title: " ",
       modal1: false,
       studentData: [],
       studentSend: {
-        organizationId: 28,
+        organizationId: 0,
         testpaperId: this.testData[this.index].testpaperId
       },
       studentMessage: [
@@ -95,13 +96,14 @@ export default {
     // 获取试卷详细信息
     getTest(msg) {
       this.studentSend.testpaperId = msg;
+      this.studentSend.organizationId = this.organizationId;
+      this.title = " ";
+      /* 先清空数组 */
+      this.studentData.length = 0;
       studentlistApi.getStudentList(this.studentSend).then(res => {
         if (res.state == 1) {
           this.$Message.success(res.stateInfo);
           // this.modal1 = true;
-          this.title = " ";
-          /* 先清空数组 */
-          this.studentData.length = 0;
           this.handle(res.data);
         } else {
           this.$Message.error(res.stateInfo);
@@ -161,7 +163,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.ivu-modal-header-inner {
-  font-weight: 700;
-}
+
 </style>
