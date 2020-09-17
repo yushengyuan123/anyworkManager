@@ -20,8 +20,8 @@ export default class OrganizationApi extends request {
     }
 
     //获取所有的试卷
-    static getExaminationPaperList() {
-        return this.postMethods('/paper/28/list')
+    static getExaminationPaperList(data) {
+        return this.postMethods('/paper/22/list',data)
     }
 
     //获取组织的学生名单
