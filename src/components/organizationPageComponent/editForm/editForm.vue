@@ -9,7 +9,7 @@
                         <FormItem label="组织头像" label-position="top">
                             <div class="image-upload-container">
                                 <img :src="imagePath">
-                                <input class="image-upload" type="file" @change="upload">
+                                <input class="image-upload" type="file" @change="upload" ref="up_image">
                             </div>
                         </FormItem>
                     </Col>
@@ -19,7 +19,7 @@
                     <Input v-model="formData.organizationName" placeholder="输入组织名称"></Input>
                 </FormItem>
                 <FormItem label="组织口令" prop="mail">
-                    <Input v-model="formData.token" placeholder="输入组织口令"></Input>
+                    <Input v-model="formData.token" placeholder="输入组织口令" :disabled="title"></Input>
                 </FormItem>
                 <FormItem label="组织描述" label-position="top">
                     <Input type="textarea" v-model="formData.description" :rows="4" placeholder="输入组织描述"/>
@@ -74,6 +74,7 @@
                     organizationName: this.organizationName,
                     token: this.token,
                     description: this.desc,
+                    organizationId: this.organizationId
                 },
 
                 filesData: new window.FormData(),
@@ -90,9 +91,22 @@
             ...mapGetters(['getFlush'])
         },
 
+        mounted() {
+            this.initFiles()
+        },
+
         methods: {
             //通过store 修改状态，通知card组件重新请求数据进行视图更新
             ...mapMutations(['notifyFlush']),
+
+            //初始化filesData
+            initFiles() {
+                const add = ["file", "token", "description", "organizationName", "organizationId"]
+
+                add.forEach(key => {
+                    this.filesData.append(key, null)
+                })
+            },
 
             //提交信息前的确认
             submitConfirm() {
@@ -110,44 +124,37 @@
                 const requestKey = this.formData
 
                 //如果用户没有选择图片，说明她不修改头像 这时需要手动加入file 否则会被400
-                if (!this.filesData.get('file')) {
-                    this.filesData.append('file', null)
+                if (this.filesData.get('file') === "null") {
+                    this.filesData.set('file', new File([], "noimage.png"))
                 }
 
                 //遍历formData，循环添加append
                 for (let key in requestKey) {
-                    //创建和修改请求的格式做区分
-                    if (key === 'token' && this.title == 1) {
-                        this.filesData.append(key, this.organizationId)
-                        continue
-                    }
-
-                    this.filesData.append(key, requestKey[key])
+                    this.filesData.set(key, requestKey[key])
                 }
+
+                let api = ""
 
                 if (this.title == 0) {
-                    organizationApi.createOrganization(this.filesData).then(res => {
-                        interceptors(() => {
-                            this.closeComponent()
-                            //通知card组件重新请求数据进行视图更新
-                            this.notifyFlush(true)
-                        }, {
-                            message: res.stateInfo,
-                            status: res.state
-                        }, true)
-                    })
+                    this.filesData.delete("organizationId")
+                    api = "createOrganization"
+                } else if (this.title == 1){
+                    this.filesData.delete("token")
+                    api = "editOrg"
                 } else {
-                    organizationApi.editOrg(this.filesData).then(res => {
-                        interceptors(() => {
-                            this.closeComponent()
-                            //通知card组件重新请求数据进行视图更新
-                            this.notifyFlush(true)
-                        }, {
-                            message: res.stateInfo,
-                            status: res.state
-                        }, true)
-                    })
+                    throw new Error("出错没有这个title类似")
                 }
+
+                organizationApi[api](this.filesData).then(res => {
+                    interceptors(() => {
+                        this.closeComponent()
+                        //通知card组件重新请求数据进行视图更新
+                        this.notifyFlush(true)
+                    }, {
+                        message: res.stateInfo,
+                        status: res.state
+                    }, true)
+                })
             },
 
             //文件上传 当修改上传文件的时候触发这个方法
@@ -155,7 +162,7 @@
                 let file = event.target.files[0]
 
                 if (!!file) {
-                    this.filesData.append("file", file, file.name)
+                    this.filesData.set("file",  file, file.name)
 
                     globalUtils.getImageSrc(file).then((blobUrl) => {
                         this.imagePath = blobUrl;

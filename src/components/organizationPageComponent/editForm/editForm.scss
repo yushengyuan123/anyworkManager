@@ -1,10 +1,15 @@
+@import "../../../share/cssMixin/cssMixin";
+
+@include change-scroll('.edit-form-container');
 .edit-form-container {
   height: 70%;
   width: 50%;
   background-color: white;
   padding: 2rem 5rem 2rem 5rem;
   border-radius: 10px;
+  overflow-y: auto;
 }
+
 
 .title-container {
   $height: 3rem;
