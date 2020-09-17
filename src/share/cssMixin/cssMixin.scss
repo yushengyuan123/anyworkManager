@@ -20,3 +20,22 @@
   line-height: $lineHeight;
 }
 
+//滚动条样式修改
+@mixin change-scroll($class_name) {
+  #{$class_name}::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  #{$class_name}::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgb(184,184,184);
+  }
+
+  #{$class_name}::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-bottom-right-radius: 8px;
+    background: rgb(235,235,235);
+  }
+}
+
