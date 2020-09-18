@@ -19,7 +19,7 @@
                     <Input v-model="formData.organizationName" placeholder="输入组织名称"></Input>
                 </FormItem>
                 <FormItem label="组织口令" prop="mail">
-                    <Input v-model="formData.token" placeholder="输入组织口令" :disabled="title"></Input>
+                    <Input v-model="formData.token" placeholder="输入组织口令" :disabled="!!title"></Input>
                 </FormItem>
                 <FormItem label="组织描述" label-position="top">
                     <Input type="textarea" v-model="formData.description" :rows="4" placeholder="输入组织描述"/>
@@ -124,7 +124,8 @@
                 const requestKey = this.formData
 
                 //如果用户没有选择图片，说明她不修改头像 这时需要手动加入file 否则会被400
-                if (this.filesData.get('file') === "null") {
+                if (this.filesData.get('file') === "null"
+                    && this.title == 0) {
                     this.filesData.set('file', new File([], "noimage.png"))
                 }
 
@@ -141,8 +142,19 @@
                 } else if (this.title == 1){
                     this.filesData.delete("token")
                     api = "editOrg"
+                    //如果用户有选择头像的话那要把头像也同时上传
+                    if (this.filesData.get("file") !== "null") {
+                        const avatar = new window.FormData()
+                        avatar.append("file", this.filesData.get("file"))
+                        avatar.append("organizationId", this.organizationId)
+                        organizationApi.editOrgAvatar(avatar)
+                            .then(res => {
+                                console.log(res)
+                            })
+                    }
+                    this.filesData.delete("file")
                 } else {
-                    throw new Error("出错没有这个title类似")
+                    throw new Error("出错没有这个title类型")
                 }
 
                 organizationApi[api](this.filesData).then(res => {
