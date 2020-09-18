@@ -29,10 +29,10 @@ $titleHeight: 60px;
   }
 
   .text-container {
-    @include flex-layout;
     height: 100%;
+    line-height: $titleHeight;
     width: calc(100% - #{$width});
-    text-align: center;
+    text-align: left;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;

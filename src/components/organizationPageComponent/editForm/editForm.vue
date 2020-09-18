@@ -136,6 +136,7 @@
 
                 let api = ""
 
+
                 if (this.title == 0) {
                     this.filesData.delete("organizationId")
                     api = "createOrganization"
