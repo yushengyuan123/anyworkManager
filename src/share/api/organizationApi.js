@@ -39,8 +39,13 @@ export default class OrganizationApi extends request {
         return this.formDateMethods('/organization/create', data)
     }
 
-    //修改组织
+    //修改组织信息
     static editOrg(data) {
         return this.formDateMethods('/organization/alter', data)
+    }
+
+    //修改组织头像
+    static editOrgAvatar(data) {
+        return this.formDateMethods('/organization/alterImage', data)
     }
 }
