@@ -58,9 +58,9 @@
     },
     data() {
       return {
-        studentId: "00000001",
-        password: "123456",
-        valcode: "0",
+        studentId: "",
+        password: "",
+        valcode: "",
         loading: false
       };
     },
