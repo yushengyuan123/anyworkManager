@@ -109,7 +109,12 @@
                 }
 
                 organizationApi.getMyOrganization().then(res => {
-                    this.renderData(res.data)
+                    interceptors(() => {
+                        this.renderData(res.data)
+                    }, {
+                        message: res.stateInfo,
+                        status: res.state
+                    }, false)
                 })
             },
 
