@@ -25,6 +25,11 @@ const routes = [
                 component: () => import('../views/Index/organization/organization')
             },
             {
+                path: 'paper',
+                name: 'paper',
+                component: () => import('../views/Index/paper/paper.vue')
+            },
+            {
                 path: 'exercisePaper',
                 name: 'ExercisePaper',
                 component: () => import('../views/Index/ExercisePaper/ExercisePaper'),
@@ -52,7 +57,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     base: process.env.BASE_URL,
     routes
 })
