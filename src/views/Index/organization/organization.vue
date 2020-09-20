@@ -75,7 +75,7 @@
 
                 organizationId = organizationId || ''
 
-                organizationApi.getMemberList({testpaperId: testPaperId}, organizationId).then(res => {
+                organizationApi.getMemberList({ testpaperId: testPaperId }, organizationId).then(res => {
                     //这里后台有点恶心人，同一个接口，传入参数不同，返回的数据结构不一样，需要自行判断
                     interceptors(() => {
                         if (res.data.leaderboards) {

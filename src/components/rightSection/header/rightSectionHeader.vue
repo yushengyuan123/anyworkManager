@@ -1,14 +1,29 @@
 <template>
     <div class="header-container">
-        <div>
+        <div @click="logout" style="cursor: pointer">
             注销
         </div>
     </div>
 </template>
 
 <script>
+    import loginApi from "../../../share/api/loginApi";
     export default {
-        name: "rightSectionHeader"
+        name: "rightSectionHeader",
+
+        methods: {
+            logout() {
+                this.$router.push({name: "login"}, () => {
+                    loginApi.logOut().then(({ state, stateInfo }) => {
+                        if (state == 1) {
+                            this.$Message.success(stateInfo)
+                        } else if (state == 0) {
+                            this.$Message.error(stateInfo)
+                        }
+                    })
+                })
+            }
+        }
     }
 </script>
 

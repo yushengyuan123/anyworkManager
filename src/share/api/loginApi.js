@@ -28,4 +28,9 @@ export default class ExerciseApi extends request {
   static testHttp (data) {
     return this.postMethods('/organization/myOrganization', data)
   }
+
+  // 退出登录
+  static logOut() {
+    return this.postMethods('/user/exit')
+  }
 }

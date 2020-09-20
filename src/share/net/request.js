@@ -1,4 +1,6 @@
 import axios from 'axios';
+import router from "../../router";
+import {Message} from "view-design";
 
 //创建axios请求实例，所有的请求操作get,post等方法通过这里发出
 const _Request = axios.create({
@@ -30,7 +32,9 @@ _Request.interceptors.response.use((result) => {
     //用户未登录访问直接跳转登陆, 防止多个接口请求3001执行多次重定向报错
     //假如除了登陆以外url上还有login的话那么这里逻辑就出错了
     if (result.data.state == 3001 && !/login/.test(location.href)) {
-        router.replace("/login")
+        router.replace("/login", () => {
+            Message.info("请登录后操作")
+        })
     }
     // 当没有前面的问题的时候，返回请求对象的数据
     // 登录请求的时候，拿取头部证书
