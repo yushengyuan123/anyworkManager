@@ -1,10 +1,12 @@
 @import "../../../../share/cssMixin/cssMixin";
 
 .organization-card-container {
+  display: inline-block;
+  vertical-align: top;
   height: 200px;
   width: 220px;
   border: 1px solid #a09e9e;
-  margin: 0 1rem 0 1rem;
+  margin: 1rem 1rem 1rem 1rem;
 }
 
 $titleHeight: 60px;
@@ -27,10 +29,10 @@ $titleHeight: 60px;
   }
 
   .text-container {
-    @include flex-layout;
     height: 100%;
+    line-height: $titleHeight;
     width: calc(100% - #{$width});
-    text-align: center;
+    text-align: left;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;

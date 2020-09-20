@@ -16,6 +16,7 @@ const routes = [
     {
         name: 'Index',
         path: '/index',
+        redirect: '/index/organization',
         component: () => import('../views/Index/Index'),
         children: [
             {
@@ -44,6 +45,11 @@ const routes = [
                         component: ()=> import('../views/Index/ExercisePaper/chapterManager/chapterManager')
                     }
                 ]
+            },
+            {
+                path: 'sendNotice',
+                name: 'sendNotice',
+                component: () => import('../views/Index/sendNotice/sendNotice')
             }
         ]
     },

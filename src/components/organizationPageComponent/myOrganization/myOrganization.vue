@@ -3,17 +3,19 @@
         <Tabs v-model:value="currentFocus" @on-click="switchOrganization" :animated="false">
             <TabPane label="所有组织" name="-1">
                 <div class="details-container">
-                    <organizationCard
-                            v-for="item in organizationList"
-                            :key="item.id"
-                            :organizationName="item.organizationName"
-                            :teacher="item.teacher"
-                            :passKey="item.passKey"
-                            :des="item.des"
-                            :imagePath="item.imagePath"
-                            :studentNumber="item.studentNumber"
-                            :organizationId="item.id"
-                    ></organizationCard>
+                    <div class="card-container">
+                        <organizationCard
+                                v-for="item in organizationList"
+                                :key="item.id"
+                                :organizationName="item.organizationName"
+                                :teacher="item.teacher"
+                                :passKey="item.passKey"
+                                :des="item.des"
+                                :imagePath="item.imagePath"
+                                :studentNumber="item.studentNumber"
+                                :organizationId="item.id"
+                        ></organizationCard>
+                    </div>
                 </div>
             </TabPane>
             <TabPane
@@ -107,7 +109,12 @@
                 }
 
                 organizationApi.getMyOrganization().then(res => {
-                    this.renderData(res.data)
+                    interceptors(() => {
+                        this.renderData(res.data)
+                    }, {
+                        message: res.stateInfo,
+                        status: res.state
+                    }, false)
                 })
             },
 

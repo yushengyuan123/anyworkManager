@@ -21,7 +21,7 @@ export default class OrganizationApi extends request {
 
     //获取所有的试卷
     static getExaminationPaperList() {
-        return this.postMethods('/paper/28/list')
+        return this.postMethods('/paper/list')
     }
 
     //获取组织的学生名单
@@ -39,8 +39,13 @@ export default class OrganizationApi extends request {
         return this.formDateMethods('/organization/create', data)
     }
 
-    //修改组织
+    //修改组织信息
     static editOrg(data) {
         return this.formDateMethods('/organization/alter', data)
+    }
+
+    //修改组织头像
+    static editOrgAvatar(data) {
+        return this.formDateMethods('/organization/alterImage', data)
     }
 }
