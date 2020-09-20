@@ -11,7 +11,7 @@
       <MenuItem name="2-2" to="/index/paper">试卷</MenuItem>
       <MenuItem name="2-3" to="/index/exercisePaper/remarkPaper">评卷</MenuItem>
     </Submenu>
-    <MenuItem name="3">
+    <MenuItem name="3" to="/index/sendNotice">
       <Icon type="ios-filing"/>发通知
     </MenuItem>
   </Menu>
