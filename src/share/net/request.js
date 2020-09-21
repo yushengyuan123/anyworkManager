@@ -29,8 +29,8 @@ _Request.interceptors.request.use((config) => {
  * 统一对返回的数据进行过滤
  */
 _Request.interceptors.response.use((result) => {
-    //用户未登录访问直接跳转登陆, 防止多个接口请求3001执行多次重定向报错
-    //假如除了登陆以外url上还有login的话那么这里逻辑就出错了
+    //用户未登录访问直接跳转登陆, 防止多个接口请求3001执行多次重定向报错假如除了登陆以外url上还有login的话那么这里逻辑就出错了
+    //
     if (result.data.state == 3001 && !/login/.test(location.href)) {
         router.replace("/login", () => {
             Message.info("请登录后操作")

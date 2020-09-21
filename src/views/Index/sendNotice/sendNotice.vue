@@ -17,7 +17,7 @@
 
 <template>
   <div class="sendNotice">
-    <Button class="addBtn" @click="addControl.ifShow=true"> 新建章节</Button>
+    <Button class="addBtn" @click="addControl.ifShow=true"> 新建公告</Button>
     <addNotice :control="addControl" @addNotice="addNotice"></addNotice>
     <noticeList :noticeArr="noticeArr" @delNotice="delNotice"></noticeList>
     <Page
