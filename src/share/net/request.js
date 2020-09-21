@@ -15,8 +15,8 @@ const _Request = axios.create({
  */
 _Request.interceptors.request.use((config) => {
     // 当存在token的时候，将token加到请求头上面
-    if (localStorage.getItem("Authorization")) {
-        config.headers['Authorization'] = JSON.parse(localStorage.getItem("Authorization")).value;
+    if (localStorage.getItem("AuthorizationAdmin")) {
+        config.headers['Authorization'] = JSON.parse(localStorage.getItem("AuthorizationAdmin")).value;
     }
 
     return config
@@ -39,7 +39,7 @@ _Request.interceptors.response.use((result) => {
     // 当没有前面的问题的时候，返回请求对象的数据
     // 登录请求的时候，拿取头部证书
     if(result.config.url == '/user/login') {
-        localStorage.setItem("Authorization", JSON.stringify({
+        localStorage.setItem("AuthorizationAdmin", JSON.stringify({
             value: result.headers.authorization,
         }))
     }
