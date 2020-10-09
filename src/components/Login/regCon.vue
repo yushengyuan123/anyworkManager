@@ -103,7 +103,7 @@
           email: this.email,
           phone: this.phone,
           valcode: 0,
-          mark: 0 // 0 注册学生，1注册教师
+          mark: 1 // 0 注册学生，1注册教师
         }
         if (!this.judeg()) {
           return;
