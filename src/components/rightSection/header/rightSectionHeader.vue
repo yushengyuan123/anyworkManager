@@ -1,7 +1,7 @@
 <template>
     <div class="header-container">
-        <div @click="logout" style="cursor: pointer">
-            注销
+        <div>
+            <span @click="logout" style="cursor: pointer">注销</span>
         </div>
     </div>
 </template>
