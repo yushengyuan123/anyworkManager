@@ -110,7 +110,6 @@ export default {
     },
     // 将子组件返回的每一道题目的值添加到数组中
     getSon(data) {
-      console.log(data)
       this.testResult.teacherJudge.push(data);
     }
   },
