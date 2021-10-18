@@ -8,10 +8,10 @@ export default class ExerciseApi extends request {
   constructor() {
     super()
   }
-  // 请求全部章节
-  static getChapter () {
-    return this.postMethods('/test/chapter')
-  }
+  // // 请求全部章节
+  // static getChapter (data) {
+  //   return this.postMethods('/test/chapter')
+  // }
 
   // 添加章节
   static addChapter (data) {

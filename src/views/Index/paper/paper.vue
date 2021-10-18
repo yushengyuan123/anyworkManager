@@ -509,10 +509,10 @@ export default {
   methods: {
     requestChapter() {
       let data = {
-        organizationId: ""
+        organizationId: this.$store.state.userInfo.organizationId
       };
       paperApi.getChapter(data).then(res => {
-        console.log(res, "获取章节");
+        // console.log(res, "获取章节");
         this.chapterList = res.data;
       });
     },
@@ -521,7 +521,7 @@ export default {
         organizationId: ""
       };
       paperApi.getPaperList(data).then(res => {
-        console.log(res, "查看一个组织里面自己发布过的试卷列表");
+        // console.log(res, "查看一个组织里面自己发布过的试卷列表");
         this.paperList = res.data;
         this.pageTotal = res.data.length;
         this.tableData = this.paperList.slice(0, 10);
@@ -559,7 +559,7 @@ export default {
       data.append("chapterId", this.formItem.paperChapter);
       data.append("file", this.file);
       paperApi.paperPublish(data).then(res => {
-        console.log(res, "发布试卷");
+        // console.log(res, "发布试卷");
         this.$Notice.success({
           title: res.stateInfo
         });
@@ -597,7 +597,7 @@ export default {
         testpaperId: params.row.testpaperId
       };
       paperApi.paperShow(data).then(res => {
-        console.log(res, "试卷预览");
+        // console.log(res, "试卷预览");
         this.questionList = res.data.questions;
         this.questionList.forEach(function(item, index) {
           if (item.type == 1) {
@@ -628,7 +628,7 @@ export default {
         testpaperId: params.row.testpaperId
       };
       paperApi.paperAnalyse(data).then(res => {
-        console.log(res, "分析试卷");
+        // console.log(res, "分析试卷");
         this.analysePaper = res.data;
         this.analyseQuestions = res.data.questions;
         this.analyseQuestions.forEach(function(item, index) {
@@ -656,7 +656,7 @@ export default {
           testpaperId: params.row.testpaperId
         };
         paperApi.paperDelete(data).then(res => {
-          console.log(res, "删除试卷信息");
+          // console.log(res, "删除试卷信息");
           this.requestPaperList();
           if (res.state == 1) {
             this.$Notice.success({
@@ -688,7 +688,7 @@ export default {
         endingTime: this.reviseFormItem.endTime
       };
       paperApi.paperUpdate(data).then(res => {
-        console.log(res, "修改试卷信息");
+        // console.log(res, "修改试卷信息");
         if (res.state == 1) {
           this.$Notice.success({
             title: res.stateInfo

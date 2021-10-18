@@ -6,8 +6,9 @@ import {Message} from "view-design";
 const _Request = axios.create({
     baseURL: process.env.VUE_APP_URL,
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
     },
+    withCredentials : true
 });
 
 /**
@@ -17,6 +18,8 @@ _Request.interceptors.request.use((config) => {
     // 当存在token的时候，将token加到请求头上面
     if (localStorage.getItem("AuthorizationAdmin")) {
         config.headers['Authorization'] = JSON.parse(localStorage.getItem("AuthorizationAdmin")).value;
+    }else {
+        config.headers['Authorization'] = null
     }
 
     return config

@@ -64,7 +64,7 @@
       },
       // 获取通知列表
       getNotice() {
-        console.log(this.noticeArr.length);
+        // console.log(this.noticeArr.length);
         let send = {
           pageNum: this.current,
           pageSize: this.pageSize
@@ -83,7 +83,7 @@
             this.$Loading.error(); // 报错，结束loading
             this.$Message.warning(res.stateInfo)
           }
-          console.log(this.noticeArr.length);
+          // console.log(this.noticeArr.length);
         })
       },
       // 请求添加一个公告

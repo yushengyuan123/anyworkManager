@@ -150,7 +150,7 @@
                         avatar.append("organizationId", this.organizationId)
                         organizationApi.editOrgAvatar(avatar)
                             .then(res => {
-                                console.log(res)
+                                // console.log(res)
                             })
                     }
                     this.filesData.delete("file")
@@ -181,7 +181,7 @@
                         this.imagePath = blobUrl;
                     });
                 } else {
-                    console.log('未选择文件')
+                    // console.log('未选择文件')
                 }
             },
 
