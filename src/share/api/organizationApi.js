@@ -10,8 +10,8 @@ export default class OrganizationApi extends request {
     }
 
     //获取学生组织
-    static getMyOrganization(data) {
-        return this.postMethods('/organization/myOrganization', data)
+    static getMyOrganization() {
+        return this.postMethods('/organization/myOrganization')
     }
 
     //获取某个组织学生的成绩排名

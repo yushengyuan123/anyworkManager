@@ -570,8 +570,7 @@ export default {
   },
 
   mounted() {
-    this.requestChapter();
-    this.requestPaperList();
+    this.getOrganization();
   },
 
   computed: {},
@@ -588,15 +587,13 @@ export default {
             organizationId: res.data[0].organizationId,
           };
           this.requestPaperList(data);
+          this.requestChapter(data)
         } else {
           this.$Message.warning(res.stateInfo);
         }
       });
     },
-    requestChapter() {
-      let data = {
-        organizationId: this.$store.state.userInfo.organizationId,
-      };
+    requestChapter(data = { organizationId: this.organizationId}) {
       paperApi.getChapter(data).then((res) => {
         // console.log(res, "获取章节");
         this.chapterList = res.data;
