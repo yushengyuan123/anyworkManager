@@ -48,7 +48,7 @@
 
 <template>
   <div class="chapterManager">
-    <div class="select-organization">
+    <!-- <div class="select-organization">
       <Select
         v-model="organization_selected"
         style="width: 200px"
@@ -62,7 +62,7 @@
           >{{ item.organizationName }}</Option
         >
       </Select>
-    </div>
+    </div> -->
     <div class="dataCon">
       <div class="list" v-for="(chapter, index) in chapterArr" :key="index">
         <span class="text" @click="editClick(chapter)">
@@ -110,22 +110,27 @@ export default {
       OrganizationApi.getMyOrganization().then((res) => {
         if (res.state == 1) {
           this.organizations = res.data;
+          this.organization_selected = this.organizations[0].organizationId;
+          let data = {
+            organizationId: this.organization_selected,
+          };
+          this.getChapter(data);
         } else {
           this.$Message.warning(res.stateInfo);
         }
       });
     },
     // 修改组织
-    changeOrganization(newOgn) {
-      this.organization_selected = newOgn;
-      let data = {
-        organizationId: this.organization_selected,
-      };
-      this.getChapter(data);
-    },
+    // changeOrganization(newOgn) {
+    //   this.organization_selected = newOgn;
+    //   let data = {
+    //     organizationId: this.organization_selected,
+    //   };
+    //   this.getChapter(data);
+    // },
 
     // 请求全部章节
-    getChapter(data = {organizationId : this.organization_selected}) {
+    getChapter(data = { organizationId: this.organization_selected }) {
       // let data = {
       //   organizationId: this.$store.state,
       // };
@@ -184,7 +189,6 @@ export default {
   },
   mounted() {
     this.getOrganization();
-    // this.getChapter();
   },
 };
 </script>

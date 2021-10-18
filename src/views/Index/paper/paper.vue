@@ -127,28 +127,39 @@
       <div class="add-paper">
         <h2>新增试卷</h2>
         <div class="button-container">
-          <i-button type="primary" class="paper-button" @click="getExcel">下载模板</i-button>
+          <i-button type="primary" class="paper-button" @click="getExcel"
+            >下载模板</i-button
+          >
           <i-button type="primary" class="paper-button">
             <input
               type="file"
               id="file"
               @change="fileChange($event)"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            >选择文件
+            />选择文件
           </i-button>
         </div>
         <i-form :model="formItem" :label-width="80">
           <div>
             <Form-item label="试卷标题" class="form-item">
-              <i-input v-model="formItem.title" placeholder="请输入" class="paper-input"></i-input>
+              <i-input
+                v-model="formItem.title"
+                placeholder="请输入"
+                class="paper-input"
+              ></i-input>
             </Form-item>
             <Form-item label="试卷类型" class="form-item">
-              <i-select v-model="formItem.paperType" placeholder="请选择" class="paper-input">
+              <i-select
+                v-model="formItem.paperType"
+                placeholder="请选择"
+                class="paper-input"
+              >
                 <i-option
                   v-for="(item, index) in paperTypeList"
                   :key="index"
                   :value="item.value"
-                >{{item.label}}</i-option>
+                  >{{ item.label }}</i-option
+                >
               </i-select>
             </Form-item>
           </div>
@@ -164,18 +175,25 @@
               ></Date-picker>
             </Form-item>
             <Form-item label="练习章节" class="form-item">
-              <i-select v-model="formItem.paperChapter" placeholder="请选择" class="paper-input">
+              <i-select
+                v-model="formItem.paperChapter"
+                placeholder="请选择"
+                class="paper-input"
+              >
                 <i-option
                   :value="item.chapterId"
                   v-for="(item, index) in chapterList"
                   :key="index"
-                >{{item.chapterName}}</i-option>
+                  >{{ item.chapterName }}</i-option
+                >
               </i-select>
             </Form-item>
           </div>
         </i-form>
         <div class="button-container">
-          <i-button type="primary" class="send-button" @click="sendFile">发布</i-button>
+          <i-button type="primary" class="send-button" @click="sendFile"
+            >发布</i-button
+          >
         </div>
       </div>
       <!--试卷表格+页码-->
@@ -188,120 +206,163 @@
           border=""
           :content="self"
         ></i-table>
-        <Page :total="pageTotal" class="page" @on-change="pageChange($event)"></Page>
+        <Page
+          :total="pageTotal"
+          class="page"
+          @on-change="pageChange($event)"
+        ></Page>
       </div>
     </div>
     <!--预览试卷模态框-->
     <Modal v-model="showModal" title="预览试卷信息" width="54%">
       <p
         slot="header"
-        style="color:#57a3f3;text-align:left;padding: 14px 16px;font-size: 30px;height:50px"
+        style="
+          color: #57a3f3;
+          text-align: left;
+          padding: 14px 16px;
+          font-size: 30px;
+          height: 50px;
+        "
       >
-        <img src="../../../assets/images/preview@1x.png" alt="icon" class="title-icon">
-        {{currentPaperType}}
+        <img
+          src="../../../assets/images/preview@1x.png"
+          alt="icon"
+          class="title-icon"
+        />
+        {{ currentPaperType }}
       </p>
-      <div class="paper-question" v-for="(item, index1) in questionList1" :key="'info1-'+index1">
+      <div
+        class="paper-question"
+        v-for="(item, index1) in questionList1"
+        :key="'info1-' + index1"
+      >
         <h3>选择题</h3>
-        <p>{{item.content}}</p>
+        <p>{{ item.content }}</p>
         <ul>
           <li class="question-option">
             <span class="question-option-signal">A</span>
-            {{item.a}}
+            {{ item.a }}
           </li>
           <li class="question-option">
             <span class="question-option-signal">B</span>
-            {{item.b}}
+            {{ item.b }}
           </li>
           <li class="question-option">
             <span class="question-option-signal">C</span>
-            {{item.c}}
+            {{ item.c }}
           </li>
           <li class="question-option">
             <span class="question-option-signal">D</span>
-            {{item.d}}
+            {{ item.d }}
           </li>
         </ul>
       </div>
-      <div class="paper-question" v-for="(item, index2) in questionList2" :key="'info2-'+index2">
+      <div
+        class="paper-question"
+        v-for="(item, index2) in questionList2"
+        :key="'info2-' + index2"
+      >
         <h3>判断题</h3>
-        <p>{{item.content}}</p>
+        <p>{{ item.content }}</p>
       </div>
-      <div class="paper-question" v-for="(item, index3) in questionList3" :key="'info3-'+index3">
+      <div
+        class="paper-question"
+        v-for="(item, index3) in questionList3"
+        :key="'info3-' + index3"
+      >
         <h3>填空题</h3>
-        <p>{{item.content}}</p>
+        <p>{{ item.content }}</p>
       </div>
-      <div class="paper-question" v-for="(item, index4) in questionList4" :key="'info4-'+index4">
+      <div
+        class="paper-question"
+        v-for="(item, index4) in questionList4"
+        :key="'info4-' + index4"
+      >
         <h3>问答题</h3>
-        <p>{{item.content}}</p>
+        <p>{{ item.content }}</p>
       </div>
     </Modal>
     <!--分析试卷模态框-->
     <Modal v-model="analyseModal" title="分析试卷信息" width="54%">
       <p
         slot="header"
-        style="color:#57a3f3;text-align:left;padding: 14px 16px;font-size: 30px;height:50px"
+        style="
+          color: #57a3f3;
+          text-align: left;
+          padding: 14px 16px;
+          font-size: 30px;
+          height: 50px;
+        "
       >
-        <img src="../../../assets/images/preview@1x.png" alt="icon" class="title-icon">
-        {{currentPaperType}}
-        <span class="average-score">平均分：{{analysePaper.averageScore}}</span>
+        <img
+          src="../../../assets/images/preview@1x.png"
+          alt="icon"
+          class="title-icon"
+        />
+        {{ currentPaperType }}
+        <span class="average-score"
+          >平均分：{{ analysePaper.averageScore }}</span
+        >
       </p>
       <div
         class="paper-question"
         v-for="(item, index1) in analyseQuestion1"
-        :key="'analyse1-'+index1"
+        :key="'analyse1-' + index1"
       >
         <h3>选择题</h3>
-        <p>{{item.content}}</p>
+        <p>{{ item.content }}</p>
         <ul>
           <li class="question-option">
             <span class="question-option-signal">A</span>
-            {{item.a}}
+            {{ item.a }}
           </li>
           <li class="question-option">
             <span class="question-option-signal">B</span>
-            {{item.b}}
+            {{ item.b }}
           </li>
           <li class="question-option">
             <span class="question-option-signal">C</span>
-            {{item.c}}
+            {{ item.c }}
           </li>
           <li class="question-option">
             <span class="question-option-signal">D</span>
-            {{item.d}}
+            {{ item.d }}
           </li>
-        </ul>解析：正确答案
-        <span style="font-weight: 600">{{item.key}}</span>
-        <p class="error-rate">错误率：{{item.errorRate}}</p>
+        </ul>
+        解析：正确答案
+        <span style="font-weight: 600">{{ item.key }}</span>
+        <p class="error-rate">错误率：{{ item.errorRate }}</p>
       </div>
       <div
         class="paper-question"
         v-for="(item, index2) in analyseQuestion2"
-        :key="'analyse-'+index2"
+        :key="'analyse-' + index2"
       >
         <h3>判断题</h3>
-        <p>{{item.content}}</p>
-        <span style="font-weight: 600">{{item.key}}</span>
-        <p class="error-rate">错误率：{{item.errorRate}}</p>
+        <p>{{ item.content }}</p>
+        <span style="font-weight: 600">{{ item.key }}</span>
+        <p class="error-rate">错误率：{{ item.errorRate }}</p>
       </div>
       <div
         class="paper-question"
         v-for="(item, index3) in analyseQuestion3"
-        :key="'analyse3-'+index3"
+        :key="'analyse3-' + index3"
       >
         <h3>填空题</h3>
-        <p>{{item.content}}</p>
-        <span style="font-weight: 600">{{item.key}}</span>
-        <p class="error-rate">错误率：{{item.errorRate}}</p>
+        <p>{{ item.content }}</p>
+        <span style="font-weight: 600">{{ item.key }}</span>
+        <p class="error-rate">错误率：{{ item.errorRate }}</p>
       </div>
       <div
         class="paper-question"
         v-for="(item, index4) in analyseQuestion4"
-        :key="'analyse4-'+index4"
+        :key="'analyse4-' + index4"
       >
         <h3>问答题</h3>
-        <p>{{item.content}}</p>
-        <span style="font-weight: 600">{{item.key}}</span>
-        <p class="error-rate">错误率：{{item.errorRate}}</p>
+        <p>{{ item.content }}</p>
+        <span style="font-weight: 600">{{ item.key }}</span>
+        <p class="error-rate">错误率：{{ item.errorRate }}</p>
       </div>
     </Modal>
     <!--修改试卷信息模态框-->
@@ -309,15 +370,24 @@
       <i-form :model="reviseFormItem" :label-width="80">
         <div>
           <Form-item label="试卷标题">
-            <i-input v-model="reviseFormItem.title" placeholder="请输入" class="paper-input"></i-input>
+            <i-input
+              v-model="reviseFormItem.title"
+              placeholder="请输入"
+              class="paper-input"
+            ></i-input>
           </Form-item>
           <Form-item label="试卷类型">
-            <i-select v-model="reviseFormItem.paperType" placeholder="请选择" class="paper-input">
+            <i-select
+              v-model="reviseFormItem.paperType"
+              placeholder="请选择"
+              class="paper-input"
+            >
               <i-option
                 v-for="(item, index) in paperTypeList"
                 :key="index"
                 :value="item.value"
-              >{{item.label}}</i-option>
+                >{{ item.label }}</i-option
+              >
             </i-select>
           </Form-item>
         </div>
@@ -341,7 +411,7 @@
 <script>
 import paperApi from "../../../share/api/paperApi";
 import { isEmpty } from "./paper.js";
-
+import OrganizationApi from "../../../share/api/organizationApi";
 export default {
   name: "paper",
   components: {},
@@ -355,14 +425,14 @@ export default {
         paperType: "",
         paperChapter: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
       },
       reviseFormItem: {
         paperId: 0,
         title: "",
         paperType: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
       },
       analysePaper: {},
       currentPaperType: "",
@@ -382,29 +452,29 @@ export default {
       paperTypeList: [
         {
           value: 1,
-          label: "考试"
+          label: "考试",
         },
         {
           value: 2,
-          label: "预习题"
+          label: "预习题",
         },
         {
           value: 3,
-          label: "课后复习题"
-        }
+          label: "课后复习题",
+        },
       ],
       columns1: [
         {
           title: "试卷标题",
-          key: "testpaperTitle"
+          key: "testpaperTitle",
         },
         {
           title: "开始时间",
-          key: "createTime"
+          key: "createTime",
         },
         {
           title: "结束时间",
-          key: "endingTime"
+          key: "endingTime",
         },
         {
           title: "操作",
@@ -422,16 +492,16 @@ export default {
                 {
                   props: {
                     type: "primary",
-                    size: "small"
+                    size: "small",
                   },
                   style: {
-                    marginRight: "5px"
+                    marginRight: "5px",
                   },
                   on: {
                     click: () => {
                       this.show(params);
-                    }
-                  }
+                    },
+                  },
                 },
                 "预览"
               ),
@@ -440,16 +510,16 @@ export default {
                 {
                   props: {
                     type: "success",
-                    size: "small"
+                    size: "small",
                   },
                   style: {
-                    marginRight: "5px"
+                    marginRight: "5px",
                   },
                   on: {
                     click: () => {
                       this.analyse(params);
-                    }
-                  }
+                    },
+                  },
                 },
                 "分析"
               ),
@@ -458,16 +528,16 @@ export default {
                 {
                   props: {
                     type: "warning",
-                    size: "small"
+                    size: "small",
                   },
                   style: {
-                    marginRight: "5px"
+                    marginRight: "5px",
                   },
                   on: {
                     click: () => {
                       this.revise(params);
-                    }
-                  }
+                    },
+                  },
                 },
                 "修改"
               ),
@@ -476,24 +546,26 @@ export default {
                 {
                   props: {
                     type: "error",
-                    size: "small"
+                    size: "small",
                   },
                   on: {
                     click: () => {
                       this.remove(params);
-                    }
-                  }
+                    },
+                  },
                 },
                 "删除"
-              )
+              ),
             ]);
-          }
-        }
+          },
+        },
       ],
       tableData: [],
       reviseModal: false,
       showModal: false,
-      analyseModal: false
+      analyseModal: false,
+      // 组织id
+      organizationId: null,
     };
   },
 
@@ -507,20 +579,31 @@ export default {
   watch: {},
 
   methods: {
+    // 请求组织
+    getOrganization() {
+      OrganizationApi.getMyOrganization().then((res) => {
+        if (res.state == 1) {
+          this.organizationId = res.data[0].organizationId;
+          let data = {
+            organizationId: res.data[0].organizationId,
+          };
+          this.requestPaperList(data);
+        } else {
+          this.$Message.warning(res.stateInfo);
+        }
+      });
+    },
     requestChapter() {
       let data = {
-        organizationId: this.$store.state.userInfo.organizationId
+        organizationId: this.$store.state.userInfo.organizationId,
       };
-      paperApi.getChapter(data).then(res => {
+      paperApi.getChapter(data).then((res) => {
         // console.log(res, "获取章节");
         this.chapterList = res.data;
       });
     },
-    requestPaperList() {
-      let data = {
-        organizationId: ""
-      };
-      paperApi.getPaperList(data).then(res => {
+    requestPaperList(data = { organizationId: this.organizationId }) {
+      paperApi.getPaperList(data).then((res) => {
         // console.log(res, "查看一个组织里面自己发布过的试卷列表");
         this.paperList = res.data;
         this.pageTotal = res.data.length;
@@ -539,14 +622,14 @@ export default {
     sendFile() {
       if (!this.file) {
         this.$Notice.warning({
-          title: "请先选择试卷文件进行上传"
+          title: "请先选择试卷文件进行上传",
         });
         return false;
       }
       for (let key in this.formItem) {
         if (isEmpty(this.formItem[key])) {
           this.$Notice.warning({
-            title: "请再次检查以上资料是否填写完整"
+            title: "请再次检查以上资料是否填写完整",
           });
           return false;
         }
@@ -558,10 +641,10 @@ export default {
       data.append("endingTime", this.formItem.endTime);
       data.append("chapterId", this.formItem.paperChapter);
       data.append("file", this.file);
-      paperApi.paperPublish(data).then(res => {
+      paperApi.paperPublish(data).then((res) => {
         // console.log(res, "发布试卷");
         this.$Notice.success({
-          title: res.stateInfo
+          title: res.stateInfo,
         });
         this.requestPaperList();
       });
@@ -594,12 +677,12 @@ export default {
       }
       let that = this;
       let data = {
-        testpaperId: params.row.testpaperId
+        testpaperId: params.row.testpaperId,
       };
-      paperApi.paperShow(data).then(res => {
+      paperApi.paperShow(data).then((res) => {
         // console.log(res, "试卷预览");
         this.questionList = res.data.questions;
-        this.questionList.forEach(function(item, index) {
+        this.questionList.forEach(function (item, index) {
           if (item.type == 1) {
             that.questionList1.push(item);
           } else if (item.type == 2) {
@@ -625,13 +708,13 @@ export default {
       this.analyseModal = true;
       let data = {
         organizationId: params.row.organizationId,
-        testpaperId: params.row.testpaperId
+        testpaperId: params.row.testpaperId,
       };
-      paperApi.paperAnalyse(data).then(res => {
+      paperApi.paperAnalyse(data).then((res) => {
         // console.log(res, "分析试卷");
         this.analysePaper = res.data;
         this.analyseQuestions = res.data.questions;
-        this.analyseQuestions.forEach(function(item, index) {
+        this.analyseQuestions.forEach(function (item, index) {
           if (item.type == 1) {
             that.analyseQuestion1.push(item);
           } else if (item.type == 2) {
@@ -653,19 +736,19 @@ export default {
     remove(params) {
       if (confirm("确定要删除吗？")) {
         let data = {
-          testpaperId: params.row.testpaperId
+          testpaperId: params.row.testpaperId,
         };
-        paperApi.paperDelete(data).then(res => {
+        paperApi.paperDelete(data).then((res) => {
           // console.log(res, "删除试卷信息");
           this.requestPaperList();
           if (res.state == 1) {
             this.$Notice.success({
-              title: res.stateInfo
+              title: res.stateInfo,
             });
             this.requestPaperList();
           } else {
             this.$Notice.error({
-              title: res.stateInfo
+              title: res.stateInfo,
             });
           }
         });
@@ -675,7 +758,7 @@ export default {
       for (let key in this.reviseFormItem) {
         if (isEmpty(this.reviseFormItem[key])) {
           this.$Notice.warning({
-            title: "请再次检查以上资料是否填写完整"
+            title: "请再次检查以上资料是否填写完整",
           });
           return false;
         }
@@ -685,21 +768,21 @@ export default {
         testpaperTitle: this.reviseFormItem.title,
         testpaperType: this.reviseFormItem.paperType,
         createTime: this.reviseFormItem.startTime,
-        endingTime: this.reviseFormItem.endTime
+        endingTime: this.reviseFormItem.endTime,
       };
-      paperApi.paperUpdate(data).then(res => {
+      paperApi.paperUpdate(data).then((res) => {
         // console.log(res, "修改试卷信息");
         if (res.state == 1) {
           this.$Notice.success({
-            title: res.stateInfo
+            title: res.stateInfo,
           });
         } else {
           this.$Notice.error({
-            title: res.stateInfo
+            title: res.stateInfo,
           });
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>

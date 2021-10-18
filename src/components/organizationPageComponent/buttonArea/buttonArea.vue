@@ -11,11 +11,11 @@
         >
         </editForm>
 
-        <Select v-model="currentFocus" style="width:200px" @on-change="statusChange">
+        <!-- <Select v-model="currentFocus" style="width:200px" @on-change="statusChange">
             <Option v-for="item in paperList" :value="item.testpaperId" :key="item.id">{{ item.title }}</Option>
-        </Select>
+        </Select> -->
 
-        <Button type="primary" shape="circle" style="margin-left: 8rem" @click="openCreateMenu">创建组织</Button>
+        <Button type="primary" shape="circle" @click="openCreateMenu">创建组织</Button>
     </div>
 </template>
 
@@ -43,9 +43,9 @@
             }
         },
 
-        mounted() {
-            this.getPaperList()
-        },
+        // mounted() {
+            // this.getPaperList()
+        // },
 
         computed: {
 
@@ -53,18 +53,18 @@
 
         methods: {
             ...mapMutations(['currentPaperChange']),
-            //获取试卷列表
-            getPaperList() {
-                OrganizationApi.getExaminationPaperList().then(res => {
-                    interceptors(() => {
-                        this.renderData(res.data)
-                        this.$store.commit('addPaper', res.data)
-                    }, {
-                        message: res.stateInfo,
-                        status: res.state
-                    }, false)
-                })
-            },
+            // //获取试卷列表
+            // getPaperList() {
+            //     OrganizationApi.getExaminationPaperList().then(res => {
+            //         interceptors(() => {
+            //             this.renderData(res.data)
+            //             this.$store.commit('addPaper', res.data)
+            //         }, {
+            //             message: res.stateInfo,
+            //             status: res.state
+            //         }, false)
+            //     })
+            // },
 
             renderData(arr) {
                 arr.forEach((item, index) => {
@@ -80,10 +80,10 @@
                 this.showCreateMenu = true
             },
 
-            //当选择改变时对应改变试卷
-            statusChange() {
-                this.currentPaperChange(this.currentFocus)
-            },
+            // //当选择改变时对应改变试卷
+            // statusChange() {
+            //     this.currentPaperChange(this.currentFocus)
+            // },
 
             //关闭痰喘
             closeEdit() {

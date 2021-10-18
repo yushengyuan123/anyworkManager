@@ -27,5 +27,4 @@ export default class ExerciseApi extends request {
   static delChapter (data) {
     return this.postMethods('/test/deleteChapter', data)
   }
-
 }
