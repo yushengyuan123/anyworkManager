@@ -36,7 +36,7 @@ export default class paperApi extends request {
 
   // 查看一个组织里面自己发布过的试卷列表
   static getPaperList (data) {
-    return this.postMethods('/paper/list', data)
+    return this.postMethods(`/paper/${data.organizationId}/list`)
   }
 
   // 获取章节

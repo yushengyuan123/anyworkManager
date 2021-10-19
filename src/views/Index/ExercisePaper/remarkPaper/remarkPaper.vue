@@ -116,7 +116,7 @@ export default {
       // console.log(data);
       this.allData.length = 0;
       organizationApi
-        .getExaminationPaperList({ organizationId: data })
+        .getExaminationPaperList(data)
         .then(res => {
           if(res.state == 1){
             // console.log(res.data);
